@@ -1,4 +1,80 @@
-.ol-box {
+
+div.gui-layer {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+div.buttons{
+    margin: 10px;
+}
+
+div.gui-button {
+    pointer-events: all;
+    cursor: pointer;
+    display: inline-block;
+    background-color: rgba(0,0,0,0.3);
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
+    border: 1px solid transparent;
+    transition: 100ms;
+    border-radius: 4px;
+}
+
+div.gui-button:hover {
+    background-color: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.8);
+}
+div.layer-picker-container {
+    user-select: none;
+    pointer-events: none;
+    overflow: visible;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+div.layer-picker-body {
+    -webkit-box-shadow: rgb(211, 211, 211) 0px 0px 10px 0px;
+    position: absolute;
+    width: 265px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    top: 70px;
+    right: 10px;
+    display: block;
+}
+
+span.layer-button {
+    pointer-events: all;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 5px;
+    margin-top: 5px;
+    width: 78px;
+    height: 98px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid transparent;
+}
+
+span.layer-button img {
+    width: 80px;
+    height: 80px;
+}
+
+span.layer-button.active {
+    border: 1px solid white;
+}
+
+div.layer-picker-button-text {
+    text-align: center;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 10px
+}.ol-box {
   box-sizing: border-box;
   border-radius: 2px;
   border: 2px solid blue;

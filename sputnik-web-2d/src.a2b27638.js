@@ -171,7 +171,1864 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"node_modules/ol/ol.css":[function(require,module,exports) {
+},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"src/ui/gui.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/d3-selection/src/namespaces.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.xhtml = void 0;
+var xhtml = "http://www.w3.org/1999/xhtml";
+exports.xhtml = xhtml;
+var _default = {
+  svg: "http://www.w3.org/2000/svg",
+  xhtml: xhtml,
+  xlink: "http://www.w3.org/1999/xlink",
+  xml: "http://www.w3.org/XML/1998/namespace",
+  xmlns: "http://www.w3.org/2000/xmlns/"
+};
+exports.default = _default;
+},{}],"node_modules/d3-selection/src/namespace.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _namespaces = _interopRequireDefault(require("./namespaces"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default(name) {
+  var prefix = name += "",
+      i = prefix.indexOf(":");
+  if (i >= 0 && (prefix = name.slice(0, i)) !== "xmlns") name = name.slice(i + 1);
+  return _namespaces.default.hasOwnProperty(prefix) ? {
+    space: _namespaces.default[prefix],
+    local: name
+  } : name;
+}
+},{"./namespaces":"node_modules/d3-selection/src/namespaces.js"}],"node_modules/d3-selection/src/creator.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _namespace = _interopRequireDefault(require("./namespace"));
+
+var _namespaces = require("./namespaces");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function creatorInherit(name) {
+  return function () {
+    var document = this.ownerDocument,
+        uri = this.namespaceURI;
+    return uri === _namespaces.xhtml && document.documentElement.namespaceURI === _namespaces.xhtml ? document.createElement(name) : document.createElementNS(uri, name);
+  };
+}
+
+function creatorFixed(fullname) {
+  return function () {
+    return this.ownerDocument.createElementNS(fullname.space, fullname.local);
+  };
+}
+
+function _default(name) {
+  var fullname = (0, _namespace.default)(name);
+  return (fullname.local ? creatorFixed : creatorInherit)(fullname);
+}
+},{"./namespace":"node_modules/d3-selection/src/namespace.js","./namespaces":"node_modules/d3-selection/src/namespaces.js"}],"node_modules/d3-selection/src/selector.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function none() {}
+
+function _default(selector) {
+  return selector == null ? none : function () {
+    return this.querySelector(selector);
+  };
+}
+},{}],"node_modules/d3-selection/src/selection/select.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _index = require("./index");
+
+var _selector = _interopRequireDefault(require("../selector"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default(select) {
+  if (typeof select !== "function") select = (0, _selector.default)(select);
+
+  for (var groups = this._groups, m = groups.length, subgroups = new Array(m), j = 0; j < m; ++j) {
+    for (var group = groups[j], n = group.length, subgroup = subgroups[j] = new Array(n), node, subnode, i = 0; i < n; ++i) {
+      if ((node = group[i]) && (subnode = select.call(node, node.__data__, i, group))) {
+        if ("__data__" in node) subnode.__data__ = node.__data__;
+        subgroup[i] = subnode;
+      }
+    }
+  }
+
+  return new _index.Selection(subgroups, this._parents);
+}
+},{"./index":"node_modules/d3-selection/src/selection/index.js","../selector":"node_modules/d3-selection/src/selector.js"}],"node_modules/d3-selection/src/selectorAll.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function empty() {
+  return [];
+}
+
+function _default(selector) {
+  return selector == null ? empty : function () {
+    return this.querySelectorAll(selector);
+  };
+}
+},{}],"node_modules/d3-selection/src/selection/selectAll.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _index = require("./index");
+
+var _selectorAll = _interopRequireDefault(require("../selectorAll"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default(select) {
+  if (typeof select !== "function") select = (0, _selectorAll.default)(select);
+
+  for (var groups = this._groups, m = groups.length, subgroups = [], parents = [], j = 0; j < m; ++j) {
+    for (var group = groups[j], n = group.length, node, i = 0; i < n; ++i) {
+      if (node = group[i]) {
+        subgroups.push(select.call(node, node.__data__, i, group));
+        parents.push(node);
+      }
+    }
+  }
+
+  return new _index.Selection(subgroups, parents);
+}
+},{"./index":"node_modules/d3-selection/src/selection/index.js","../selectorAll":"node_modules/d3-selection/src/selectorAll.js"}],"node_modules/d3-selection/src/matcher.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default(selector) {
+  return function () {
+    return this.matches(selector);
+  };
+}
+},{}],"node_modules/d3-selection/src/selection/filter.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _index = require("./index");
+
+var _matcher = _interopRequireDefault(require("../matcher"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default(match) {
+  if (typeof match !== "function") match = (0, _matcher.default)(match);
+
+  for (var groups = this._groups, m = groups.length, subgroups = new Array(m), j = 0; j < m; ++j) {
+    for (var group = groups[j], n = group.length, subgroup = subgroups[j] = [], node, i = 0; i < n; ++i) {
+      if ((node = group[i]) && match.call(node, node.__data__, i, group)) {
+        subgroup.push(node);
+      }
+    }
+  }
+
+  return new _index.Selection(subgroups, this._parents);
+}
+},{"./index":"node_modules/d3-selection/src/selection/index.js","../matcher":"node_modules/d3-selection/src/matcher.js"}],"node_modules/d3-selection/src/selection/sparse.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default(update) {
+  return new Array(update.length);
+}
+},{}],"node_modules/d3-selection/src/selection/enter.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+exports.EnterNode = EnterNode;
+
+var _sparse = _interopRequireDefault(require("./sparse"));
+
+var _index = require("./index");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default() {
+  return new _index.Selection(this._enter || this._groups.map(_sparse.default), this._parents);
+}
+
+function EnterNode(parent, datum) {
+  this.ownerDocument = parent.ownerDocument;
+  this.namespaceURI = parent.namespaceURI;
+  this._next = null;
+  this._parent = parent;
+  this.__data__ = datum;
+}
+
+EnterNode.prototype = {
+  constructor: EnterNode,
+  appendChild: function (child) {
+    return this._parent.insertBefore(child, this._next);
+  },
+  insertBefore: function (child, next) {
+    return this._parent.insertBefore(child, next);
+  },
+  querySelector: function (selector) {
+    return this._parent.querySelector(selector);
+  },
+  querySelectorAll: function (selector) {
+    return this._parent.querySelectorAll(selector);
+  }
+};
+},{"./sparse":"node_modules/d3-selection/src/selection/sparse.js","./index":"node_modules/d3-selection/src/selection/index.js"}],"node_modules/d3-selection/src/constant.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default(x) {
+  return function () {
+    return x;
+  };
+}
+},{}],"node_modules/d3-selection/src/selection/data.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _index = require("./index");
+
+var _enter = require("./enter");
+
+var _constant = _interopRequireDefault(require("../constant"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var keyPrefix = "$"; // Protect against keys like “__proto__”.
+
+function bindIndex(parent, group, enter, update, exit, data) {
+  var i = 0,
+      node,
+      groupLength = group.length,
+      dataLength = data.length; // Put any non-null nodes that fit into update.
+  // Put any null nodes into enter.
+  // Put any remaining data into enter.
+
+  for (; i < dataLength; ++i) {
+    if (node = group[i]) {
+      node.__data__ = data[i];
+      update[i] = node;
+    } else {
+      enter[i] = new _enter.EnterNode(parent, data[i]);
+    }
+  } // Put any non-null nodes that don’t fit into exit.
+
+
+  for (; i < groupLength; ++i) {
+    if (node = group[i]) {
+      exit[i] = node;
+    }
+  }
+}
+
+function bindKey(parent, group, enter, update, exit, data, key) {
+  var i,
+      node,
+      nodeByKeyValue = {},
+      groupLength = group.length,
+      dataLength = data.length,
+      keyValues = new Array(groupLength),
+      keyValue; // Compute the key for each node.
+  // If multiple nodes have the same key, the duplicates are added to exit.
+
+  for (i = 0; i < groupLength; ++i) {
+    if (node = group[i]) {
+      keyValues[i] = keyValue = keyPrefix + key.call(node, node.__data__, i, group);
+
+      if (keyValue in nodeByKeyValue) {
+        exit[i] = node;
+      } else {
+        nodeByKeyValue[keyValue] = node;
+      }
+    }
+  } // Compute the key for each datum.
+  // If there a node associated with this key, join and add it to update.
+  // If there is not (or the key is a duplicate), add it to enter.
+
+
+  for (i = 0; i < dataLength; ++i) {
+    keyValue = keyPrefix + key.call(parent, data[i], i, data);
+
+    if (node = nodeByKeyValue[keyValue]) {
+      update[i] = node;
+      node.__data__ = data[i];
+      nodeByKeyValue[keyValue] = null;
+    } else {
+      enter[i] = new _enter.EnterNode(parent, data[i]);
+    }
+  } // Add any remaining nodes that were not bound to data to exit.
+
+
+  for (i = 0; i < groupLength; ++i) {
+    if ((node = group[i]) && nodeByKeyValue[keyValues[i]] === node) {
+      exit[i] = node;
+    }
+  }
+}
+
+function _default(value, key) {
+  if (!value) {
+    data = new Array(this.size()), j = -1;
+    this.each(function (d) {
+      data[++j] = d;
+    });
+    return data;
+  }
+
+  var bind = key ? bindKey : bindIndex,
+      parents = this._parents,
+      groups = this._groups;
+  if (typeof value !== "function") value = (0, _constant.default)(value);
+
+  for (var m = groups.length, update = new Array(m), enter = new Array(m), exit = new Array(m), j = 0; j < m; ++j) {
+    var parent = parents[j],
+        group = groups[j],
+        groupLength = group.length,
+        data = value.call(parent, parent && parent.__data__, j, parents),
+        dataLength = data.length,
+        enterGroup = enter[j] = new Array(dataLength),
+        updateGroup = update[j] = new Array(dataLength),
+        exitGroup = exit[j] = new Array(groupLength);
+    bind(parent, group, enterGroup, updateGroup, exitGroup, data, key); // Now connect the enter nodes to their following update node, such that
+    // appendChild can insert the materialized enter node before this node,
+    // rather than at the end of the parent node.
+
+    for (var i0 = 0, i1 = 0, previous, next; i0 < dataLength; ++i0) {
+      if (previous = enterGroup[i0]) {
+        if (i0 >= i1) i1 = i0 + 1;
+
+        while (!(next = updateGroup[i1]) && ++i1 < dataLength);
+
+        previous._next = next || null;
+      }
+    }
+  }
+
+  update = new _index.Selection(update, parents);
+  update._enter = enter;
+  update._exit = exit;
+  return update;
+}
+},{"./index":"node_modules/d3-selection/src/selection/index.js","./enter":"node_modules/d3-selection/src/selection/enter.js","../constant":"node_modules/d3-selection/src/constant.js"}],"node_modules/d3-selection/src/selection/exit.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _sparse = _interopRequireDefault(require("./sparse"));
+
+var _index = require("./index");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default() {
+  return new _index.Selection(this._exit || this._groups.map(_sparse.default), this._parents);
+}
+},{"./sparse":"node_modules/d3-selection/src/selection/sparse.js","./index":"node_modules/d3-selection/src/selection/index.js"}],"node_modules/d3-selection/src/selection/join.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default(onenter, onupdate, onexit) {
+  var enter = this.enter(),
+      update = this,
+      exit = this.exit();
+  enter = typeof onenter === "function" ? onenter(enter) : enter.append(onenter + "");
+  if (onupdate != null) update = onupdate(update);
+  if (onexit == null) exit.remove();else onexit(exit);
+  return enter && update ? enter.merge(update).order() : update;
+}
+},{}],"node_modules/d3-selection/src/selection/merge.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _index = require("./index");
+
+function _default(selection) {
+  for (var groups0 = this._groups, groups1 = selection._groups, m0 = groups0.length, m1 = groups1.length, m = Math.min(m0, m1), merges = new Array(m0), j = 0; j < m; ++j) {
+    for (var group0 = groups0[j], group1 = groups1[j], n = group0.length, merge = merges[j] = new Array(n), node, i = 0; i < n; ++i) {
+      if (node = group0[i] || group1[i]) {
+        merge[i] = node;
+      }
+    }
+  }
+
+  for (; j < m0; ++j) {
+    merges[j] = groups0[j];
+  }
+
+  return new _index.Selection(merges, this._parents);
+}
+},{"./index":"node_modules/d3-selection/src/selection/index.js"}],"node_modules/d3-selection/src/selection/order.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default() {
+  for (var groups = this._groups, j = -1, m = groups.length; ++j < m;) {
+    for (var group = groups[j], i = group.length - 1, next = group[i], node; --i >= 0;) {
+      if (node = group[i]) {
+        if (next && node.compareDocumentPosition(next) ^ 4) next.parentNode.insertBefore(node, next);
+        next = node;
+      }
+    }
+  }
+
+  return this;
+}
+},{}],"node_modules/d3-selection/src/selection/sort.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _index = require("./index");
+
+function _default(compare) {
+  if (!compare) compare = ascending;
+
+  function compareNode(a, b) {
+    return a && b ? compare(a.__data__, b.__data__) : !a - !b;
+  }
+
+  for (var groups = this._groups, m = groups.length, sortgroups = new Array(m), j = 0; j < m; ++j) {
+    for (var group = groups[j], n = group.length, sortgroup = sortgroups[j] = new Array(n), node, i = 0; i < n; ++i) {
+      if (node = group[i]) {
+        sortgroup[i] = node;
+      }
+    }
+
+    sortgroup.sort(compareNode);
+  }
+
+  return new _index.Selection(sortgroups, this._parents).order();
+}
+
+function ascending(a, b) {
+  return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
+}
+},{"./index":"node_modules/d3-selection/src/selection/index.js"}],"node_modules/d3-selection/src/selection/call.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default() {
+  var callback = arguments[0];
+  arguments[0] = this;
+  callback.apply(null, arguments);
+  return this;
+}
+},{}],"node_modules/d3-selection/src/selection/nodes.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default() {
+  var nodes = new Array(this.size()),
+      i = -1;
+  this.each(function () {
+    nodes[++i] = this;
+  });
+  return nodes;
+}
+},{}],"node_modules/d3-selection/src/selection/node.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default() {
+  for (var groups = this._groups, j = 0, m = groups.length; j < m; ++j) {
+    for (var group = groups[j], i = 0, n = group.length; i < n; ++i) {
+      var node = group[i];
+      if (node) return node;
+    }
+  }
+
+  return null;
+}
+},{}],"node_modules/d3-selection/src/selection/size.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default() {
+  var size = 0;
+  this.each(function () {
+    ++size;
+  });
+  return size;
+}
+},{}],"node_modules/d3-selection/src/selection/empty.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default() {
+  return !this.node();
+}
+},{}],"node_modules/d3-selection/src/selection/each.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default(callback) {
+  for (var groups = this._groups, j = 0, m = groups.length; j < m; ++j) {
+    for (var group = groups[j], i = 0, n = group.length, node; i < n; ++i) {
+      if (node = group[i]) callback.call(node, node.__data__, i, group);
+    }
+  }
+
+  return this;
+}
+},{}],"node_modules/d3-selection/src/selection/attr.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _namespace = _interopRequireDefault(require("../namespace"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function attrRemove(name) {
+  return function () {
+    this.removeAttribute(name);
+  };
+}
+
+function attrRemoveNS(fullname) {
+  return function () {
+    this.removeAttributeNS(fullname.space, fullname.local);
+  };
+}
+
+function attrConstant(name, value) {
+  return function () {
+    this.setAttribute(name, value);
+  };
+}
+
+function attrConstantNS(fullname, value) {
+  return function () {
+    this.setAttributeNS(fullname.space, fullname.local, value);
+  };
+}
+
+function attrFunction(name, value) {
+  return function () {
+    var v = value.apply(this, arguments);
+    if (v == null) this.removeAttribute(name);else this.setAttribute(name, v);
+  };
+}
+
+function attrFunctionNS(fullname, value) {
+  return function () {
+    var v = value.apply(this, arguments);
+    if (v == null) this.removeAttributeNS(fullname.space, fullname.local);else this.setAttributeNS(fullname.space, fullname.local, v);
+  };
+}
+
+function _default(name, value) {
+  var fullname = (0, _namespace.default)(name);
+
+  if (arguments.length < 2) {
+    var node = this.node();
+    return fullname.local ? node.getAttributeNS(fullname.space, fullname.local) : node.getAttribute(fullname);
+  }
+
+  return this.each((value == null ? fullname.local ? attrRemoveNS : attrRemove : typeof value === "function" ? fullname.local ? attrFunctionNS : attrFunction : fullname.local ? attrConstantNS : attrConstant)(fullname, value));
+}
+},{"../namespace":"node_modules/d3-selection/src/namespace.js"}],"node_modules/d3-selection/src/window.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default(node) {
+  return node.ownerDocument && node.ownerDocument.defaultView || // node is a Node
+  node.document && node // node is a Window
+  || node.defaultView; // node is a Document
+}
+},{}],"node_modules/d3-selection/src/selection/style.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+exports.styleValue = styleValue;
+
+var _window = _interopRequireDefault(require("../window"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function styleRemove(name) {
+  return function () {
+    this.style.removeProperty(name);
+  };
+}
+
+function styleConstant(name, value, priority) {
+  return function () {
+    this.style.setProperty(name, value, priority);
+  };
+}
+
+function styleFunction(name, value, priority) {
+  return function () {
+    var v = value.apply(this, arguments);
+    if (v == null) this.style.removeProperty(name);else this.style.setProperty(name, v, priority);
+  };
+}
+
+function _default(name, value, priority) {
+  return arguments.length > 1 ? this.each((value == null ? styleRemove : typeof value === "function" ? styleFunction : styleConstant)(name, value, priority == null ? "" : priority)) : styleValue(this.node(), name);
+}
+
+function styleValue(node, name) {
+  return node.style.getPropertyValue(name) || (0, _window.default)(node).getComputedStyle(node, null).getPropertyValue(name);
+}
+},{"../window":"node_modules/d3-selection/src/window.js"}],"node_modules/d3-selection/src/selection/property.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function propertyRemove(name) {
+  return function () {
+    delete this[name];
+  };
+}
+
+function propertyConstant(name, value) {
+  return function () {
+    this[name] = value;
+  };
+}
+
+function propertyFunction(name, value) {
+  return function () {
+    var v = value.apply(this, arguments);
+    if (v == null) delete this[name];else this[name] = v;
+  };
+}
+
+function _default(name, value) {
+  return arguments.length > 1 ? this.each((value == null ? propertyRemove : typeof value === "function" ? propertyFunction : propertyConstant)(name, value)) : this.node()[name];
+}
+},{}],"node_modules/d3-selection/src/selection/classed.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function classArray(string) {
+  return string.trim().split(/^|\s+/);
+}
+
+function classList(node) {
+  return node.classList || new ClassList(node);
+}
+
+function ClassList(node) {
+  this._node = node;
+  this._names = classArray(node.getAttribute("class") || "");
+}
+
+ClassList.prototype = {
+  add: function (name) {
+    var i = this._names.indexOf(name);
+
+    if (i < 0) {
+      this._names.push(name);
+
+      this._node.setAttribute("class", this._names.join(" "));
+    }
+  },
+  remove: function (name) {
+    var i = this._names.indexOf(name);
+
+    if (i >= 0) {
+      this._names.splice(i, 1);
+
+      this._node.setAttribute("class", this._names.join(" "));
+    }
+  },
+  contains: function (name) {
+    return this._names.indexOf(name) >= 0;
+  }
+};
+
+function classedAdd(node, names) {
+  var list = classList(node),
+      i = -1,
+      n = names.length;
+
+  while (++i < n) list.add(names[i]);
+}
+
+function classedRemove(node, names) {
+  var list = classList(node),
+      i = -1,
+      n = names.length;
+
+  while (++i < n) list.remove(names[i]);
+}
+
+function classedTrue(names) {
+  return function () {
+    classedAdd(this, names);
+  };
+}
+
+function classedFalse(names) {
+  return function () {
+    classedRemove(this, names);
+  };
+}
+
+function classedFunction(names, value) {
+  return function () {
+    (value.apply(this, arguments) ? classedAdd : classedRemove)(this, names);
+  };
+}
+
+function _default(name, value) {
+  var names = classArray(name + "");
+
+  if (arguments.length < 2) {
+    var list = classList(this.node()),
+        i = -1,
+        n = names.length;
+
+    while (++i < n) if (!list.contains(names[i])) return false;
+
+    return true;
+  }
+
+  return this.each((typeof value === "function" ? classedFunction : value ? classedTrue : classedFalse)(names, value));
+}
+},{}],"node_modules/d3-selection/src/selection/text.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function textRemove() {
+  this.textContent = "";
+}
+
+function textConstant(value) {
+  return function () {
+    this.textContent = value;
+  };
+}
+
+function textFunction(value) {
+  return function () {
+    var v = value.apply(this, arguments);
+    this.textContent = v == null ? "" : v;
+  };
+}
+
+function _default(value) {
+  return arguments.length ? this.each(value == null ? textRemove : (typeof value === "function" ? textFunction : textConstant)(value)) : this.node().textContent;
+}
+},{}],"node_modules/d3-selection/src/selection/html.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function htmlRemove() {
+  this.innerHTML = "";
+}
+
+function htmlConstant(value) {
+  return function () {
+    this.innerHTML = value;
+  };
+}
+
+function htmlFunction(value) {
+  return function () {
+    var v = value.apply(this, arguments);
+    this.innerHTML = v == null ? "" : v;
+  };
+}
+
+function _default(value) {
+  return arguments.length ? this.each(value == null ? htmlRemove : (typeof value === "function" ? htmlFunction : htmlConstant)(value)) : this.node().innerHTML;
+}
+},{}],"node_modules/d3-selection/src/selection/raise.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function raise() {
+  if (this.nextSibling) this.parentNode.appendChild(this);
+}
+
+function _default() {
+  return this.each(raise);
+}
+},{}],"node_modules/d3-selection/src/selection/lower.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function lower() {
+  if (this.previousSibling) this.parentNode.insertBefore(this, this.parentNode.firstChild);
+}
+
+function _default() {
+  return this.each(lower);
+}
+},{}],"node_modules/d3-selection/src/selection/append.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _creator = _interopRequireDefault(require("../creator"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default(name) {
+  var create = typeof name === "function" ? name : (0, _creator.default)(name);
+  return this.select(function () {
+    return this.appendChild(create.apply(this, arguments));
+  });
+}
+},{"../creator":"node_modules/d3-selection/src/creator.js"}],"node_modules/d3-selection/src/selection/insert.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _creator = _interopRequireDefault(require("../creator"));
+
+var _selector = _interopRequireDefault(require("../selector"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function constantNull() {
+  return null;
+}
+
+function _default(name, before) {
+  var create = typeof name === "function" ? name : (0, _creator.default)(name),
+      select = before == null ? constantNull : typeof before === "function" ? before : (0, _selector.default)(before);
+  return this.select(function () {
+    return this.insertBefore(create.apply(this, arguments), select.apply(this, arguments) || null);
+  });
+}
+},{"../creator":"node_modules/d3-selection/src/creator.js","../selector":"node_modules/d3-selection/src/selector.js"}],"node_modules/d3-selection/src/selection/remove.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function remove() {
+  var parent = this.parentNode;
+  if (parent) parent.removeChild(this);
+}
+
+function _default() {
+  return this.each(remove);
+}
+},{}],"node_modules/d3-selection/src/selection/clone.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function selection_cloneShallow() {
+  return this.parentNode.insertBefore(this.cloneNode(false), this.nextSibling);
+}
+
+function selection_cloneDeep() {
+  return this.parentNode.insertBefore(this.cloneNode(true), this.nextSibling);
+}
+
+function _default(deep) {
+  return this.select(deep ? selection_cloneDeep : selection_cloneShallow);
+}
+},{}],"node_modules/d3-selection/src/selection/datum.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default(value) {
+  return arguments.length ? this.property("__data__", value) : this.node().__data__;
+}
+},{}],"node_modules/d3-selection/src/selection/on.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+exports.customEvent = customEvent;
+exports.event = void 0;
+var filterEvents = {};
+var event = null;
+exports.event = event;
+
+if (typeof document !== "undefined") {
+  var element = document.documentElement;
+
+  if (!("onmouseenter" in element)) {
+    filterEvents = {
+      mouseenter: "mouseover",
+      mouseleave: "mouseout"
+    };
+  }
+}
+
+function filterContextListener(listener, index, group) {
+  listener = contextListener(listener, index, group);
+  return function (event) {
+    var related = event.relatedTarget;
+
+    if (!related || related !== this && !(related.compareDocumentPosition(this) & 8)) {
+      listener.call(this, event);
+    }
+  };
+}
+
+function contextListener(listener, index, group) {
+  return function (event1) {
+    var event0 = event; // Events can be reentrant (e.g., focus).
+
+    exports.event = event = event1;
+
+    try {
+      listener.call(this, this.__data__, index, group);
+    } finally {
+      exports.event = event = event0;
+    }
+  };
+}
+
+function parseTypenames(typenames) {
+  return typenames.trim().split(/^|\s+/).map(function (t) {
+    var name = "",
+        i = t.indexOf(".");
+    if (i >= 0) name = t.slice(i + 1), t = t.slice(0, i);
+    return {
+      type: t,
+      name: name
+    };
+  });
+}
+
+function onRemove(typename) {
+  return function () {
+    var on = this.__on;
+    if (!on) return;
+
+    for (var j = 0, i = -1, m = on.length, o; j < m; ++j) {
+      if (o = on[j], (!typename.type || o.type === typename.type) && o.name === typename.name) {
+        this.removeEventListener(o.type, o.listener, o.capture);
+      } else {
+        on[++i] = o;
+      }
+    }
+
+    if (++i) on.length = i;else delete this.__on;
+  };
+}
+
+function onAdd(typename, value, capture) {
+  var wrap = filterEvents.hasOwnProperty(typename.type) ? filterContextListener : contextListener;
+  return function (d, i, group) {
+    var on = this.__on,
+        o,
+        listener = wrap(value, i, group);
+    if (on) for (var j = 0, m = on.length; j < m; ++j) {
+      if ((o = on[j]).type === typename.type && o.name === typename.name) {
+        this.removeEventListener(o.type, o.listener, o.capture);
+        this.addEventListener(o.type, o.listener = listener, o.capture = capture);
+        o.value = value;
+        return;
+      }
+    }
+    this.addEventListener(typename.type, listener, capture);
+    o = {
+      type: typename.type,
+      name: typename.name,
+      value: value,
+      listener: listener,
+      capture: capture
+    };
+    if (!on) this.__on = [o];else on.push(o);
+  };
+}
+
+function _default(typename, value, capture) {
+  var typenames = parseTypenames(typename + ""),
+      i,
+      n = typenames.length,
+      t;
+
+  if (arguments.length < 2) {
+    var on = this.node().__on;
+
+    if (on) for (var j = 0, m = on.length, o; j < m; ++j) {
+      for (i = 0, o = on[j]; i < n; ++i) {
+        if ((t = typenames[i]).type === o.type && t.name === o.name) {
+          return o.value;
+        }
+      }
+    }
+    return;
+  }
+
+  on = value ? onAdd : onRemove;
+  if (capture == null) capture = false;
+
+  for (i = 0; i < n; ++i) this.each(on(typenames[i], value, capture));
+
+  return this;
+}
+
+function customEvent(event1, listener, that, args) {
+  var event0 = event;
+  event1.sourceEvent = event;
+  exports.event = event = event1;
+
+  try {
+    return listener.apply(that, args);
+  } finally {
+    exports.event = event = event0;
+  }
+}
+},{}],"node_modules/d3-selection/src/selection/dispatch.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _window = _interopRequireDefault(require("../window"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function dispatchEvent(node, type, params) {
+  var window = (0, _window.default)(node),
+      event = window.CustomEvent;
+
+  if (typeof event === "function") {
+    event = new event(type, params);
+  } else {
+    event = window.document.createEvent("Event");
+    if (params) event.initEvent(type, params.bubbles, params.cancelable), event.detail = params.detail;else event.initEvent(type, false, false);
+  }
+
+  node.dispatchEvent(event);
+}
+
+function dispatchConstant(type, params) {
+  return function () {
+    return dispatchEvent(this, type, params);
+  };
+}
+
+function dispatchFunction(type, params) {
+  return function () {
+    return dispatchEvent(this, type, params.apply(this, arguments));
+  };
+}
+
+function _default(type, params) {
+  return this.each((typeof params === "function" ? dispatchFunction : dispatchConstant)(type, params));
+}
+},{"../window":"node_modules/d3-selection/src/window.js"}],"node_modules/d3-selection/src/selection/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Selection = Selection;
+exports.default = exports.root = void 0;
+
+var _select = _interopRequireDefault(require("./select"));
+
+var _selectAll = _interopRequireDefault(require("./selectAll"));
+
+var _filter = _interopRequireDefault(require("./filter"));
+
+var _data = _interopRequireDefault(require("./data"));
+
+var _enter = _interopRequireDefault(require("./enter"));
+
+var _exit = _interopRequireDefault(require("./exit"));
+
+var _join = _interopRequireDefault(require("./join"));
+
+var _merge = _interopRequireDefault(require("./merge"));
+
+var _order = _interopRequireDefault(require("./order"));
+
+var _sort = _interopRequireDefault(require("./sort"));
+
+var _call = _interopRequireDefault(require("./call"));
+
+var _nodes = _interopRequireDefault(require("./nodes"));
+
+var _node = _interopRequireDefault(require("./node"));
+
+var _size = _interopRequireDefault(require("./size"));
+
+var _empty = _interopRequireDefault(require("./empty"));
+
+var _each = _interopRequireDefault(require("./each"));
+
+var _attr = _interopRequireDefault(require("./attr"));
+
+var _style = _interopRequireDefault(require("./style"));
+
+var _property = _interopRequireDefault(require("./property"));
+
+var _classed = _interopRequireDefault(require("./classed"));
+
+var _text = _interopRequireDefault(require("./text"));
+
+var _html = _interopRequireDefault(require("./html"));
+
+var _raise = _interopRequireDefault(require("./raise"));
+
+var _lower = _interopRequireDefault(require("./lower"));
+
+var _append = _interopRequireDefault(require("./append"));
+
+var _insert = _interopRequireDefault(require("./insert"));
+
+var _remove = _interopRequireDefault(require("./remove"));
+
+var _clone = _interopRequireDefault(require("./clone"));
+
+var _datum = _interopRequireDefault(require("./datum"));
+
+var _on = _interopRequireDefault(require("./on"));
+
+var _dispatch = _interopRequireDefault(require("./dispatch"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var root = [null];
+exports.root = root;
+
+function Selection(groups, parents) {
+  this._groups = groups;
+  this._parents = parents;
+}
+
+function selection() {
+  return new Selection([[document.documentElement]], root);
+}
+
+Selection.prototype = selection.prototype = {
+  constructor: Selection,
+  select: _select.default,
+  selectAll: _selectAll.default,
+  filter: _filter.default,
+  data: _data.default,
+  enter: _enter.default,
+  exit: _exit.default,
+  join: _join.default,
+  merge: _merge.default,
+  order: _order.default,
+  sort: _sort.default,
+  call: _call.default,
+  nodes: _nodes.default,
+  node: _node.default,
+  size: _size.default,
+  empty: _empty.default,
+  each: _each.default,
+  attr: _attr.default,
+  style: _style.default,
+  property: _property.default,
+  classed: _classed.default,
+  text: _text.default,
+  html: _html.default,
+  raise: _raise.default,
+  lower: _lower.default,
+  append: _append.default,
+  insert: _insert.default,
+  remove: _remove.default,
+  clone: _clone.default,
+  datum: _datum.default,
+  on: _on.default,
+  dispatch: _dispatch.default
+};
+var _default = selection;
+exports.default = _default;
+},{"./select":"node_modules/d3-selection/src/selection/select.js","./selectAll":"node_modules/d3-selection/src/selection/selectAll.js","./filter":"node_modules/d3-selection/src/selection/filter.js","./data":"node_modules/d3-selection/src/selection/data.js","./enter":"node_modules/d3-selection/src/selection/enter.js","./exit":"node_modules/d3-selection/src/selection/exit.js","./join":"node_modules/d3-selection/src/selection/join.js","./merge":"node_modules/d3-selection/src/selection/merge.js","./order":"node_modules/d3-selection/src/selection/order.js","./sort":"node_modules/d3-selection/src/selection/sort.js","./call":"node_modules/d3-selection/src/selection/call.js","./nodes":"node_modules/d3-selection/src/selection/nodes.js","./node":"node_modules/d3-selection/src/selection/node.js","./size":"node_modules/d3-selection/src/selection/size.js","./empty":"node_modules/d3-selection/src/selection/empty.js","./each":"node_modules/d3-selection/src/selection/each.js","./attr":"node_modules/d3-selection/src/selection/attr.js","./style":"node_modules/d3-selection/src/selection/style.js","./property":"node_modules/d3-selection/src/selection/property.js","./classed":"node_modules/d3-selection/src/selection/classed.js","./text":"node_modules/d3-selection/src/selection/text.js","./html":"node_modules/d3-selection/src/selection/html.js","./raise":"node_modules/d3-selection/src/selection/raise.js","./lower":"node_modules/d3-selection/src/selection/lower.js","./append":"node_modules/d3-selection/src/selection/append.js","./insert":"node_modules/d3-selection/src/selection/insert.js","./remove":"node_modules/d3-selection/src/selection/remove.js","./clone":"node_modules/d3-selection/src/selection/clone.js","./datum":"node_modules/d3-selection/src/selection/datum.js","./on":"node_modules/d3-selection/src/selection/on.js","./dispatch":"node_modules/d3-selection/src/selection/dispatch.js"}],"node_modules/d3-selection/src/select.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _index = require("./selection/index");
+
+function _default(selector) {
+  return typeof selector === "string" ? new _index.Selection([[document.querySelector(selector)]], [document.documentElement]) : new _index.Selection([[selector]], _index.root);
+}
+},{"./selection/index":"node_modules/d3-selection/src/selection/index.js"}],"node_modules/d3-selection/src/create.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _creator = _interopRequireDefault(require("./creator"));
+
+var _select = _interopRequireDefault(require("./select"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default(name) {
+  return (0, _select.default)((0, _creator.default)(name).call(document.documentElement));
+}
+},{"./creator":"node_modules/d3-selection/src/creator.js","./select":"node_modules/d3-selection/src/select.js"}],"node_modules/d3-selection/src/local.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = local;
+var nextId = 0;
+
+function local() {
+  return new Local();
+}
+
+function Local() {
+  this._ = "@" + (++nextId).toString(36);
+}
+
+Local.prototype = local.prototype = {
+  constructor: Local,
+  get: function (node) {
+    var id = this._;
+
+    while (!(id in node)) if (!(node = node.parentNode)) return;
+
+    return node[id];
+  },
+  set: function (node, value) {
+    return node[this._] = value;
+  },
+  remove: function (node) {
+    return this._ in node && delete node[this._];
+  },
+  toString: function () {
+    return this._;
+  }
+};
+},{}],"node_modules/d3-selection/src/sourceEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _on = require("./selection/on");
+
+function _default() {
+  var current = _on.event,
+      source;
+
+  while (source = current.sourceEvent) current = source;
+
+  return current;
+}
+},{"./selection/on":"node_modules/d3-selection/src/selection/on.js"}],"node_modules/d3-selection/src/point.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default(node, event) {
+  var svg = node.ownerSVGElement || node;
+
+  if (svg.createSVGPoint) {
+    var point = svg.createSVGPoint();
+    point.x = event.clientX, point.y = event.clientY;
+    point = point.matrixTransform(node.getScreenCTM().inverse());
+    return [point.x, point.y];
+  }
+
+  var rect = node.getBoundingClientRect();
+  return [event.clientX - rect.left - node.clientLeft, event.clientY - rect.top - node.clientTop];
+}
+},{}],"node_modules/d3-selection/src/mouse.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _sourceEvent = _interopRequireDefault(require("./sourceEvent"));
+
+var _point = _interopRequireDefault(require("./point"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default(node) {
+  var event = (0, _sourceEvent.default)();
+  if (event.changedTouches) event = event.changedTouches[0];
+  return (0, _point.default)(node, event);
+}
+},{"./sourceEvent":"node_modules/d3-selection/src/sourceEvent.js","./point":"node_modules/d3-selection/src/point.js"}],"node_modules/d3-selection/src/selectAll.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _index = require("./selection/index");
+
+function _default(selector) {
+  return typeof selector === "string" ? new _index.Selection([document.querySelectorAll(selector)], [document.documentElement]) : new _index.Selection([selector == null ? [] : selector], _index.root);
+}
+},{"./selection/index":"node_modules/d3-selection/src/selection/index.js"}],"node_modules/d3-selection/src/touch.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _sourceEvent = _interopRequireDefault(require("./sourceEvent"));
+
+var _point = _interopRequireDefault(require("./point"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default(node, touches, identifier) {
+  if (arguments.length < 3) identifier = touches, touches = (0, _sourceEvent.default)().changedTouches;
+
+  for (var i = 0, n = touches ? touches.length : 0, touch; i < n; ++i) {
+    if ((touch = touches[i]).identifier === identifier) {
+      return (0, _point.default)(node, touch);
+    }
+  }
+
+  return null;
+}
+},{"./sourceEvent":"node_modules/d3-selection/src/sourceEvent.js","./point":"node_modules/d3-selection/src/point.js"}],"node_modules/d3-selection/src/touches.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _sourceEvent = _interopRequireDefault(require("./sourceEvent"));
+
+var _point = _interopRequireDefault(require("./point"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default(node, touches) {
+  if (touches == null) touches = (0, _sourceEvent.default)().touches;
+
+  for (var i = 0, n = touches ? touches.length : 0, points = new Array(n); i < n; ++i) {
+    points[i] = (0, _point.default)(node, touches[i]);
+  }
+
+  return points;
+}
+},{"./sourceEvent":"node_modules/d3-selection/src/sourceEvent.js","./point":"node_modules/d3-selection/src/point.js"}],"node_modules/d3-selection/src/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "create", {
+  enumerable: true,
+  get: function () {
+    return _create.default;
+  }
+});
+Object.defineProperty(exports, "creator", {
+  enumerable: true,
+  get: function () {
+    return _creator.default;
+  }
+});
+Object.defineProperty(exports, "local", {
+  enumerable: true,
+  get: function () {
+    return _local.default;
+  }
+});
+Object.defineProperty(exports, "matcher", {
+  enumerable: true,
+  get: function () {
+    return _matcher.default;
+  }
+});
+Object.defineProperty(exports, "mouse", {
+  enumerable: true,
+  get: function () {
+    return _mouse.default;
+  }
+});
+Object.defineProperty(exports, "namespace", {
+  enumerable: true,
+  get: function () {
+    return _namespace.default;
+  }
+});
+Object.defineProperty(exports, "namespaces", {
+  enumerable: true,
+  get: function () {
+    return _namespaces.default;
+  }
+});
+Object.defineProperty(exports, "clientPoint", {
+  enumerable: true,
+  get: function () {
+    return _point.default;
+  }
+});
+Object.defineProperty(exports, "select", {
+  enumerable: true,
+  get: function () {
+    return _select.default;
+  }
+});
+Object.defineProperty(exports, "selectAll", {
+  enumerable: true,
+  get: function () {
+    return _selectAll.default;
+  }
+});
+Object.defineProperty(exports, "selection", {
+  enumerable: true,
+  get: function () {
+    return _index.default;
+  }
+});
+Object.defineProperty(exports, "selector", {
+  enumerable: true,
+  get: function () {
+    return _selector.default;
+  }
+});
+Object.defineProperty(exports, "selectorAll", {
+  enumerable: true,
+  get: function () {
+    return _selectorAll.default;
+  }
+});
+Object.defineProperty(exports, "style", {
+  enumerable: true,
+  get: function () {
+    return _style.styleValue;
+  }
+});
+Object.defineProperty(exports, "touch", {
+  enumerable: true,
+  get: function () {
+    return _touch.default;
+  }
+});
+Object.defineProperty(exports, "touches", {
+  enumerable: true,
+  get: function () {
+    return _touches.default;
+  }
+});
+Object.defineProperty(exports, "window", {
+  enumerable: true,
+  get: function () {
+    return _window.default;
+  }
+});
+Object.defineProperty(exports, "event", {
+  enumerable: true,
+  get: function () {
+    return _on.event;
+  }
+});
+Object.defineProperty(exports, "customEvent", {
+  enumerable: true,
+  get: function () {
+    return _on.customEvent;
+  }
+});
+
+var _create = _interopRequireDefault(require("./create"));
+
+var _creator = _interopRequireDefault(require("./creator"));
+
+var _local = _interopRequireDefault(require("./local"));
+
+var _matcher = _interopRequireDefault(require("./matcher"));
+
+var _mouse = _interopRequireDefault(require("./mouse"));
+
+var _namespace = _interopRequireDefault(require("./namespace"));
+
+var _namespaces = _interopRequireDefault(require("./namespaces"));
+
+var _point = _interopRequireDefault(require("./point"));
+
+var _select = _interopRequireDefault(require("./select"));
+
+var _selectAll = _interopRequireDefault(require("./selectAll"));
+
+var _index = _interopRequireDefault(require("./selection/index"));
+
+var _selector = _interopRequireDefault(require("./selector"));
+
+var _selectorAll = _interopRequireDefault(require("./selectorAll"));
+
+var _style = require("./selection/style");
+
+var _touch = _interopRequireDefault(require("./touch"));
+
+var _touches = _interopRequireDefault(require("./touches"));
+
+var _window = _interopRequireDefault(require("./window"));
+
+var _on = require("./selection/on");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./create":"node_modules/d3-selection/src/create.js","./creator":"node_modules/d3-selection/src/creator.js","./local":"node_modules/d3-selection/src/local.js","./matcher":"node_modules/d3-selection/src/matcher.js","./mouse":"node_modules/d3-selection/src/mouse.js","./namespace":"node_modules/d3-selection/src/namespace.js","./namespaces":"node_modules/d3-selection/src/namespaces.js","./point":"node_modules/d3-selection/src/point.js","./select":"node_modules/d3-selection/src/select.js","./selectAll":"node_modules/d3-selection/src/selectAll.js","./selection/index":"node_modules/d3-selection/src/selection/index.js","./selector":"node_modules/d3-selection/src/selector.js","./selectorAll":"node_modules/d3-selection/src/selectorAll.js","./selection/style":"node_modules/d3-selection/src/selection/style.js","./touch":"node_modules/d3-selection/src/touch.js","./touches":"node_modules/d3-selection/src/touches.js","./window":"node_modules/d3-selection/src/window.js","./selection/on":"node_modules/d3-selection/src/selection/on.js"}],"src/ui/make-screenshot/make-screenshot.svg":[function(require,module,exports) {
+module.exports = '<svg viewBox="-5 -5 60 60" width="40" height="40"><path d="M0 4v42h50V4zm2 2h46v38H2zm2 2v22.781a1.016 1.016 0 0 0 0 .407V42h42v-4.844a1.016 1.016 0 0 0 0-.406V8zm2 2h38v24.563l-9.281-9.282a1.009 1.009 0 0 0-.844-.281 1.008 1.008 0 0 0-.594.281l-4.25 4.25L18.75 18.313a1 1 0 0 0-.906-.313c-.2.027-.383.117-.532.25L6 28.688zm29 5a3 3 0 1 0 .002 6.002A3 3 0 0 0 35 15zm-17.063 5.438l9.657 10.53-2.313 2.313a1.014 1.014 0 0 0 0 1.438c.399.398 1.04.398 1.438 0l2.843-2.875c.141-.086.258-.203.344-.344L34 27.437l10 10V40H6v-8.531z"/></svg>'
+},{}],"src/events/Broker.js":[function(require,module,exports) {
+var listeners = {};
+module.exports = {
+  on: function on(evt, func) {
+    !listeners[evt] && (listeners[evt] = []);
+    listeners[evt].push(func);
+  },
+  off: function off(evt, func) {
+    listeners[evt] && listeners[evt].remove(func);
+  },
+  fire: function fire(evt, arg) {
+    listeners[evt] && listeners[evt].forEach(function (listener) {
+      listener(arg);
+    });
+  }
+};
+},{}],"src/events/Events.js":[function(require,module,exports) {
+module.exports = {
+  LAYER_CHANGE: 'layer-change',
+  MAKE_SCREEN_SHOT: 'make-screen-shot',
+  MAP_FLY_TO: 'map-fly-to',
+  DRAW_MODE: 'draw-mode'
+};
+},{}],"src/ui/make-screenshot/MakeScreenshot.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = MakeScreenShotButton;
+
+var _makeScreenshot = _interopRequireDefault(require("./make-screenshot.svg"));
+
+var _Broker = _interopRequireDefault(require("../../events/Broker"));
+
+var _Events = _interopRequireDefault(require("../../events/Events"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function MakeScreenShotButton() {
+  return {
+    image: _makeScreenshot.default,
+    action: function action() {
+      _Broker.default.fire(_Events.default.MAKE_SCREEN_SHOT, 'screenshot.png');
+    }
+  };
+}
+},{"./make-screenshot.svg":"src/ui/make-screenshot/make-screenshot.svg","../../events/Broker":"src/events/Broker.js","../../events/Events":"src/events/Events.js"}],"src/ui/layer-picker/layer-picker.svg":[function(require,module,exports) {
+module.exports = '<svg width="40" height="40" viewBox="-5 -5 60 60"><path d="M23.125 0a.984.984 0 0 0-.469.188L.406 17.25a.993.993 0 0 0-.363.98.99.99 0 0 0 .707.77l9.719 2.5L.406 29.25a.993.993 0 0 0-.363.98.99.99 0 0 0 .707.77l9.75 2.531L.406 41.22A1 1 0 0 0 .75 43l27 6.969a.998.998 0 0 0 .938-.25l21-19.625a1 1 0 0 0-.532-1.719l-8.875-1.5 9.407-8.781a1 1 0 0 0-.532-1.719l-8.843-1.5 9.374-8.781a1 1 0 0 0-.53-1.719L23.436 0a1.048 1.048 0 0 0-.312 0zm.406 2.031l3.563.594A.949.949 0 0 0 27 3c0 .55.45 1 1 1s1-.45 1-1v-.031l4.25.719c.184.199.457.312.75.312.152 0 .277-.063.406-.125l7.969 1.375A.967.967 0 0 0 42 6c0 .55.45 1 1 1s1-.45 1-1a.957.957 0 0 0-.156-.5l3 .5-9.219 8.625a.954.954 0 0 0-.156.125.985.985 0 0 0-.157.156.466.466 0 0 0-.03.063l-9.563 8.937-1.938-.5A.976.976 0 0 0 25 23a.949.949 0 0 0-.375.094l-7.656-1.969c.008-.043.031-.078.031-.125 0-.55-.45-1-1-1-.414 0-.754.266-.906.625l-1.875-.469a.466.466 0 0 0-.063-.031l-.344-.063a.88.88 0 0 0-.093-.03l-5-1.313c.18-.18.281-.442.281-.719 0-.55-.45-1-1-1s-1 .45-1 1c0 .113.027.21.063.313l-2.844-.75 12-9.188A1.002 1.002 0 0 0 16 10c.55 0 1-.45 1-1s-.45-1-1-1a.949.949 0 0 0-.375.094l2.438-1.875c.105.437.464.781.937.781.55 0 1-.45 1-1 0-.375-.227-.672-.531-.844l1.843-1.437c.18.168.422.281.688.281.55 0 1-.45 1-1a.955.955 0 0 0-.125-.469zM25 5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zM22 8c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm-27 3c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm-27 3c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm4.469 2.594L46.844 18l-9.157 8.594a.472.472 0 0 0-.062.062h-.031a1.017 1.017 0 0 0-.407.407l-9.468 8.843-24.5-6.343 9.719-7.407L27.75 25.97a.998.998 0 0 0 .938-.25zM13 17c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm-9 3c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm6 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm10.438 8.594L46.843 30 27.687 47.875 3.22 41.562l9.5-7.25a.906.906 0 0 0 .187-.156L27.75 37.97a.998.998 0 0 0 .938-.25z"/></svg>'
+},{}],"src/ui/layer-picker/layer-picker.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"src/ui/layer-picker/LayerPicker.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = LayerPicker;
+
+var _layerPicker = _interopRequireDefault(require("./layer-picker.svg"));
+
+require("./layer-picker.css");
+
+var _d3Selection = require("d3-selection");
+
+var _Broker = _interopRequireDefault(require("../../events/Broker"));
+
+var _Events = _interopRequireDefault(require("../../events/Events"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function LayerPicker(config) {
+  var div = config.target.append('div').classed('layer-picker-container', true);
+  var picker = div.append('div').classed('layer-picker-body', true).datum({
+    visible: false
+  });
+  var btns = picker.selectAll('div.layer-button').data(config.buttons).enter().append('span').classed('layer-button', true).attr('title', function (d) {
+    return d.title;
+  }).on('click', function (d) {
+    _Broker.default.fire(_Events.default.LAYER_CHANGE, d);
+
+    btns.classed('active', false);
+    (0, _d3Selection.select)(this).classed('active', true);
+    toggle();
+  }).each(function (d) {
+    var btn = (0, _d3Selection.select)(this).classed('active', config.active === d.id);
+    btn.append('img').attr('src', d.img);
+    btn.append('div').classed('layer-picker-button-text', true).html(d.title);
+  });
+  updateVisibility();
+  return {
+    image: _layerPicker.default,
+    action: toggle
+  };
+
+  function toggle() {
+    picker.datum().visible = !picker.datum().visible;
+    updateVisibility();
+  }
+
+  function updateVisibility() {
+    picker.style('display', function (d) {
+      return d.visible ? 'block' : 'none';
+    });
+  }
+}
+},{"./layer-picker.svg":"src/ui/layer-picker/layer-picker.svg","./layer-picker.css":"src/ui/layer-picker/layer-picker.css","d3-selection":"node_modules/d3-selection/src/index.js","../../events/Broker":"src/events/Broker.js","../../events/Events":"src/events/Events.js"}],"src/ui/layer-picker/LayerPickerConfig.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = LayerPickerConfig;
+
+function LayerPickerConfig(target) {
+  return {
+    target: target,
+    active: 'osm',
+    buttons: [{
+      id: 'osm',
+      title: 'Схема',
+      img: 'https://strangerintheq.github.io/coco/images/layers/openStreetMap.png',
+      url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    }, {
+      id: 'osm-topo',
+      title: 'Топографическая',
+      img: 'https://strangerintheq.github.io/coco/images/layers/worldMap.png',
+      url: 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png'
+    }]
+  };
+}
+},{}],"src/ui/map-fly-to/map-fly-to.svg":[function(require,module,exports) {
+module.exports = '<svg viewBox="-5 -5 60 60" width="40" height="40"><path d="M25 2C12.318 2 2 12.318 2 25s10.318 23 23 23 23-10.318 23-23c0-4.597-1.36-8.88-3.693-12.479l-.893.893-.57.57C44.832 17.191 46 20.957 46 25c0 11.58-9.42 21-21 21S4 36.58 4 25 13.42 4 25 4c4.913 0 9.42 1.717 13 4.557v2.029l-2.436 2.435C32.744 10.527 29.052 9 25 9 16.178 9 9 16.178 9 25s7.178 16 16 16 16-7.178 16-16c0-3.329-1.024-6.423-2.771-8.986l-1.45 1.449A13.91 13.91 0 0 1 39 25c0 7.72-6.28 14-14 14s-14-6.28-14-14 6.28-14 14-14c3.501 0 6.695 1.302 9.15 3.436l-3.546 3.546A8.925 8.925 0 0 0 25 16c-4.962 0-9 4.038-9 9s4.038 9 9 9 9-4.038 9-9a8.931 8.931 0 0 0-.887-3.87l-1.525 1.524c.262.734.412 1.523.412 2.346 0 3.86-3.14 7-7 7s-7-3.14-7-7 3.14-7 7-7c1.57 0 3.015.526 4.184 1.402l-3.668 3.668A2 2 0 0 0 25 23a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-.068-.518L39.414 12H42l5-5h-4V3l-3.873 3.873A22.87 22.87 0 0 0 25 2z"/></svg>'
+},{}],"src/ui/map-fly-to/MapFlyTo.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = MapFlyToButton;
+
+var _mapFlyTo = _interopRequireDefault(require("./map-fly-to.svg"));
+
+var _Broker = _interopRequireDefault(require("../../events/Broker"));
+
+var _Events = _interopRequireDefault(require("../../events/Events"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function MapFlyToButton() {
+  return {
+    image: _mapFlyTo.default,
+    action: function action() {
+      _Broker.default.fire(_Events.default.MAP_FLY_TO, {
+        center: [4187241, 7508844],
+        zoom: 15,
+        duration: 2000
+      });
+    }
+  };
+}
+},{"./map-fly-to.svg":"src/ui/map-fly-to/map-fly-to.svg","../../events/Broker":"src/events/Broker.js","../../events/Events":"src/events/Events.js"}],"src/ui/gui.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+require("./gui.css");
+
+var _d3Selection = require("d3-selection");
+
+var _MakeScreenshot = _interopRequireDefault(require("./make-screenshot/MakeScreenshot"));
+
+var _LayerPicker = _interopRequireDefault(require("./layer-picker/LayerPicker"));
+
+var _LayerPickerConfig = _interopRequireDefault(require("./layer-picker/LayerPickerConfig"));
+
+var _MapFlyTo = _interopRequireDefault(require("./map-fly-to/MapFlyTo"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default(targetDivId) {
+  var gui = (0, _d3Selection.select)('#' + targetDivId).append('div').classed('gui-layer', true);
+  gui.append('div').classed('buttons', true).selectAll('div.gui-button').data([(0, _MapFlyTo.default)(), (0, _MakeScreenshot.default)(), (0, _LayerPicker.default)((0, _LayerPickerConfig.default)(gui))]).enter().append('div').classed('gui-button', true).each(function (d) {
+    (0, _d3Selection.select)(this).html(d.image).on('click', d.action).selectAll('path').attr('fill', '#ffffff');
+  });
+}
+
+;
+},{"./gui.css":"src/ui/gui.css","d3-selection":"node_modules/d3-selection/src/index.js","./make-screenshot/MakeScreenshot":"src/ui/make-screenshot/MakeScreenshot.js","./layer-picker/LayerPicker":"src/ui/layer-picker/LayerPicker.js","./layer-picker/LayerPickerConfig":"src/ui/layer-picker/LayerPickerConfig.js","./map-fly-to/MapFlyTo":"src/ui/map-fly-to/MapFlyTo.js"}],"node_modules/ol/ol.css":[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
@@ -64830,1741 +66687,96 @@ function (Layer) {
 ImageLayer.prototype.getSource;
 var _default = ImageLayer;
 exports.default = _default;
-},{"../LayerType.js":"node_modules/ol/LayerType.js","./Layer.js":"node_modules/ol/layer/Layer.js"}],"node_modules/d3-selection/src/namespaces.js":[function(require,module,exports) {
+},{"../LayerType.js":"node_modules/ol/LayerType.js","./Layer.js":"node_modules/ol/layer/Layer.js"}],"node_modules/file-saver/dist/FileSaver.min.js":[function(require,module,exports) {
+var define;
+var global = arguments[3];
+(function(a,b){if("function"==typeof define&&define.amd)define([],b);else if("undefined"!=typeof exports)b();else{b(),a.FileSaver={exports:{}}.exports}})(this,function(){"use strict";function b(a,b){return"undefined"==typeof b?b={autoBom:!1}:"object"!=typeof b&&(console.warn("Depricated: Expected third argument to be a object"),b={autoBom:!b}),b.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(a.type)?new Blob(["\uFEFF",a],{type:a.type}):a}function c(b,c,d){var e=new XMLHttpRequest;e.open("GET",b),e.responseType="blob",e.onload=function(){a(e.response,c,d)},e.onerror=function(){console.error("could not download file")},e.send()}function d(a){var b=new XMLHttpRequest;return b.open("HEAD",a,!1),b.send(),200<=b.status&&299>=b.status}function e(a){try{a.dispatchEvent(new MouseEvent("click"))}catch(c){var b=document.createEvent("MouseEvents");b.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null),a.dispatchEvent(b)}}var f="object"==typeof window&&window.window===window?window:"object"==typeof self&&self.self===self?self:"object"==typeof global&&global.global===global?global:void 0,a=f.saveAs||"object"!=typeof window||window!==f?function(){}:"download"in HTMLAnchorElement.prototype?function(b,g,h){var i=f.URL||f.webkitURL,j=document.createElement("a");g=g||b.name||"download",j.download=g,j.rel="noopener","string"==typeof b?(j.href=b,j.origin===location.origin?e(j):d(j.href)?c(b,g,h):e(j,j.target="_blank")):(j.href=i.createObjectURL(b),setTimeout(function(){i.revokeObjectURL(j.href)},4E4),setTimeout(function(){e(j)},0))}:"msSaveOrOpenBlob"in navigator?function(f,g,h){if(g=g||f.name||"download","string"!=typeof f)navigator.msSaveOrOpenBlob(b(f,h),g);else if(d(f))c(f,g,h);else{var i=document.createElement("a");i.href=f,i.target="_blank",setTimeout(function(){e(i)})}}:function(a,b,d,e){if(e=e||open("","_blank"),e&&(e.document.title=e.document.body.innerText="downloading..."),"string"==typeof a)return c(a,b,d);var g="application/octet-stream"===a.type,h=/constructor/i.test(f.HTMLElement)||f.safari,i=/CriOS\/[\d]+/.test(navigator.userAgent);if((i||g&&h)&&"object"==typeof FileReader){var j=new FileReader;j.onloadend=function(){var a=j.result;a=i?a:a.replace(/^data:[^;]*;/,"data:attachment/file;"),e?e.location.href=a:location=a,e=null},j.readAsDataURL(a)}else{var k=f.URL||f.webkitURL,l=k.createObjectURL(a);e?e.location=l:location.href=l,e=null,setTimeout(function(){k.revokeObjectURL(l)},4E4)}};f.saveAs=a.saveAs=a,"undefined"!=typeof module&&(module.exports=a)});
+
+
+},{}],"src/map/screen-shot-support.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = exports.xhtml = void 0;
-var xhtml = "http://www.w3.org/1999/xhtml";
-exports.xhtml = xhtml;
-var _default = {
-  svg: "http://www.w3.org/2000/svg",
-  xhtml: xhtml,
-  xlink: "http://www.w3.org/1999/xlink",
-  xml: "http://www.w3.org/XML/1998/namespace",
-  xmlns: "http://www.w3.org/2000/xmlns/"
-};
-exports.default = _default;
-},{}],"node_modules/d3-selection/src/namespace.js":[function(require,module,exports) {
-"use strict";
+exports.default = ScreenShotSupport;
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
+var _fileSaver = require("file-saver");
 
-var _namespaces = _interopRequireDefault(require("./namespaces"));
+var _Broker = _interopRequireDefault(require("../events/Broker"));
+
+var _Events = _interopRequireDefault(require("../events/Events"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _default(name) {
-  var prefix = name += "",
-      i = prefix.indexOf(":");
-  if (i >= 0 && (prefix = name.slice(0, i)) !== "xmlns") name = name.slice(i + 1);
-  return _namespaces.default.hasOwnProperty(prefix) ? {
-    space: _namespaces.default[prefix],
-    local: name
-  } : name;
-}
-},{"./namespaces":"node_modules/d3-selection/src/namespaces.js"}],"node_modules/d3-selection/src/creator.js":[function(require,module,exports) {
-"use strict";
+function ScreenShotSupport(map) {
+  _Broker.default.on(_Events.default.MAKE_SCREEN_SHOT, function (fileName) {
+    map.once('rendercomplete', function (event) {
+      var canvas = event.context.canvas;
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _namespace = _interopRequireDefault(require("./namespace"));
-
-var _namespaces = require("./namespaces");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function creatorInherit(name) {
-  return function () {
-    var document = this.ownerDocument,
-        uri = this.namespaceURI;
-    return uri === _namespaces.xhtml && document.documentElement.namespaceURI === _namespaces.xhtml ? document.createElement(name) : document.createElementNS(uri, name);
-  };
-}
-
-function creatorFixed(fullname) {
-  return function () {
-    return this.ownerDocument.createElementNS(fullname.space, fullname.local);
-  };
-}
-
-function _default(name) {
-  var fullname = (0, _namespace.default)(name);
-  return (fullname.local ? creatorFixed : creatorInherit)(fullname);
-}
-},{"./namespace":"node_modules/d3-selection/src/namespace.js","./namespaces":"node_modules/d3-selection/src/namespaces.js"}],"node_modules/d3-selection/src/selector.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function none() {}
-
-function _default(selector) {
-  return selector == null ? none : function () {
-    return this.querySelector(selector);
-  };
-}
-},{}],"node_modules/d3-selection/src/selection/select.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _index = require("./index");
-
-var _selector = _interopRequireDefault(require("../selector"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _default(select) {
-  if (typeof select !== "function") select = (0, _selector.default)(select);
-
-  for (var groups = this._groups, m = groups.length, subgroups = new Array(m), j = 0; j < m; ++j) {
-    for (var group = groups[j], n = group.length, subgroup = subgroups[j] = new Array(n), node, subnode, i = 0; i < n; ++i) {
-      if ((node = group[i]) && (subnode = select.call(node, node.__data__, i, group))) {
-        if ("__data__" in node) subnode.__data__ = node.__data__;
-        subgroup[i] = subnode;
+      if (navigator.msSaveBlob) {
+        return navigator.msSaveBlob(canvas.msToBlob(), fileName);
       }
-    }
-  }
 
-  return new _index.Selection(subgroups, this._parents);
-}
-},{"./index":"node_modules/d3-selection/src/selection/index.js","../selector":"node_modules/d3-selection/src/selector.js"}],"node_modules/d3-selection/src/selectorAll.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function empty() {
-  return [];
-}
-
-function _default(selector) {
-  return selector == null ? empty : function () {
-    return this.querySelectorAll(selector);
-  };
-}
-},{}],"node_modules/d3-selection/src/selection/selectAll.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _index = require("./index");
-
-var _selectorAll = _interopRequireDefault(require("../selectorAll"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _default(select) {
-  if (typeof select !== "function") select = (0, _selectorAll.default)(select);
-
-  for (var groups = this._groups, m = groups.length, subgroups = [], parents = [], j = 0; j < m; ++j) {
-    for (var group = groups[j], n = group.length, node, i = 0; i < n; ++i) {
-      if (node = group[i]) {
-        subgroups.push(select.call(node, node.__data__, i, group));
-        parents.push(node);
-      }
-    }
-  }
-
-  return new _index.Selection(subgroups, parents);
-}
-},{"./index":"node_modules/d3-selection/src/selection/index.js","../selectorAll":"node_modules/d3-selection/src/selectorAll.js"}],"node_modules/d3-selection/src/matcher.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default(selector) {
-  return function () {
-    return this.matches(selector);
-  };
-}
-},{}],"node_modules/d3-selection/src/selection/filter.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _index = require("./index");
-
-var _matcher = _interopRequireDefault(require("../matcher"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _default(match) {
-  if (typeof match !== "function") match = (0, _matcher.default)(match);
-
-  for (var groups = this._groups, m = groups.length, subgroups = new Array(m), j = 0; j < m; ++j) {
-    for (var group = groups[j], n = group.length, subgroup = subgroups[j] = [], node, i = 0; i < n; ++i) {
-      if ((node = group[i]) && match.call(node, node.__data__, i, group)) {
-        subgroup.push(node);
-      }
-    }
-  }
-
-  return new _index.Selection(subgroups, this._parents);
-}
-},{"./index":"node_modules/d3-selection/src/selection/index.js","../matcher":"node_modules/d3-selection/src/matcher.js"}],"node_modules/d3-selection/src/selection/sparse.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default(update) {
-  return new Array(update.length);
-}
-},{}],"node_modules/d3-selection/src/selection/enter.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-exports.EnterNode = EnterNode;
-
-var _sparse = _interopRequireDefault(require("./sparse"));
-
-var _index = require("./index");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _default() {
-  return new _index.Selection(this._enter || this._groups.map(_sparse.default), this._parents);
-}
-
-function EnterNode(parent, datum) {
-  this.ownerDocument = parent.ownerDocument;
-  this.namespaceURI = parent.namespaceURI;
-  this._next = null;
-  this._parent = parent;
-  this.__data__ = datum;
-}
-
-EnterNode.prototype = {
-  constructor: EnterNode,
-  appendChild: function (child) {
-    return this._parent.insertBefore(child, this._next);
-  },
-  insertBefore: function (child, next) {
-    return this._parent.insertBefore(child, next);
-  },
-  querySelector: function (selector) {
-    return this._parent.querySelector(selector);
-  },
-  querySelectorAll: function (selector) {
-    return this._parent.querySelectorAll(selector);
-  }
-};
-},{"./sparse":"node_modules/d3-selection/src/selection/sparse.js","./index":"node_modules/d3-selection/src/selection/index.js"}],"node_modules/d3-selection/src/constant.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default(x) {
-  return function () {
-    return x;
-  };
-}
-},{}],"node_modules/d3-selection/src/selection/data.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _index = require("./index");
-
-var _enter = require("./enter");
-
-var _constant = _interopRequireDefault(require("../constant"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var keyPrefix = "$"; // Protect against keys like “__proto__”.
-
-function bindIndex(parent, group, enter, update, exit, data) {
-  var i = 0,
-      node,
-      groupLength = group.length,
-      dataLength = data.length; // Put any non-null nodes that fit into update.
-  // Put any null nodes into enter.
-  // Put any remaining data into enter.
-
-  for (; i < dataLength; ++i) {
-    if (node = group[i]) {
-      node.__data__ = data[i];
-      update[i] = node;
-    } else {
-      enter[i] = new _enter.EnterNode(parent, data[i]);
-    }
-  } // Put any non-null nodes that don’t fit into exit.
-
-
-  for (; i < groupLength; ++i) {
-    if (node = group[i]) {
-      exit[i] = node;
-    }
-  }
-}
-
-function bindKey(parent, group, enter, update, exit, data, key) {
-  var i,
-      node,
-      nodeByKeyValue = {},
-      groupLength = group.length,
-      dataLength = data.length,
-      keyValues = new Array(groupLength),
-      keyValue; // Compute the key for each node.
-  // If multiple nodes have the same key, the duplicates are added to exit.
-
-  for (i = 0; i < groupLength; ++i) {
-    if (node = group[i]) {
-      keyValues[i] = keyValue = keyPrefix + key.call(node, node.__data__, i, group);
-
-      if (keyValue in nodeByKeyValue) {
-        exit[i] = node;
-      } else {
-        nodeByKeyValue[keyValue] = node;
-      }
-    }
-  } // Compute the key for each datum.
-  // If there a node associated with this key, join and add it to update.
-  // If there is not (or the key is a duplicate), add it to enter.
-
-
-  for (i = 0; i < dataLength; ++i) {
-    keyValue = keyPrefix + key.call(parent, data[i], i, data);
-
-    if (node = nodeByKeyValue[keyValue]) {
-      update[i] = node;
-      node.__data__ = data[i];
-      nodeByKeyValue[keyValue] = null;
-    } else {
-      enter[i] = new _enter.EnterNode(parent, data[i]);
-    }
-  } // Add any remaining nodes that were not bound to data to exit.
-
-
-  for (i = 0; i < groupLength; ++i) {
-    if ((node = group[i]) && nodeByKeyValue[keyValues[i]] === node) {
-      exit[i] = node;
-    }
-  }
-}
-
-function _default(value, key) {
-  if (!value) {
-    data = new Array(this.size()), j = -1;
-    this.each(function (d) {
-      data[++j] = d;
+      canvas.toBlob(function (blob) {
+        (0, _fileSaver.saveAs)(blob, fileName);
+      });
     });
-    return data;
-  }
-
-  var bind = key ? bindKey : bindIndex,
-      parents = this._parents,
-      groups = this._groups;
-  if (typeof value !== "function") value = (0, _constant.default)(value);
-
-  for (var m = groups.length, update = new Array(m), enter = new Array(m), exit = new Array(m), j = 0; j < m; ++j) {
-    var parent = parents[j],
-        group = groups[j],
-        groupLength = group.length,
-        data = value.call(parent, parent && parent.__data__, j, parents),
-        dataLength = data.length,
-        enterGroup = enter[j] = new Array(dataLength),
-        updateGroup = update[j] = new Array(dataLength),
-        exitGroup = exit[j] = new Array(groupLength);
-    bind(parent, group, enterGroup, updateGroup, exitGroup, data, key); // Now connect the enter nodes to their following update node, such that
-    // appendChild can insert the materialized enter node before this node,
-    // rather than at the end of the parent node.
-
-    for (var i0 = 0, i1 = 0, previous, next; i0 < dataLength; ++i0) {
-      if (previous = enterGroup[i0]) {
-        if (i0 >= i1) i1 = i0 + 1;
-
-        while (!(next = updateGroup[i1]) && ++i1 < dataLength);
-
-        previous._next = next || null;
-      }
-    }
-  }
-
-  update = new _index.Selection(update, parents);
-  update._enter = enter;
-  update._exit = exit;
-  return update;
-}
-},{"./index":"node_modules/d3-selection/src/selection/index.js","./enter":"node_modules/d3-selection/src/selection/enter.js","../constant":"node_modules/d3-selection/src/constant.js"}],"node_modules/d3-selection/src/selection/exit.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _sparse = _interopRequireDefault(require("./sparse"));
-
-var _index = require("./index");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _default() {
-  return new _index.Selection(this._exit || this._groups.map(_sparse.default), this._parents);
-}
-},{"./sparse":"node_modules/d3-selection/src/selection/sparse.js","./index":"node_modules/d3-selection/src/selection/index.js"}],"node_modules/d3-selection/src/selection/join.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default(onenter, onupdate, onexit) {
-  var enter = this.enter(),
-      update = this,
-      exit = this.exit();
-  enter = typeof onenter === "function" ? onenter(enter) : enter.append(onenter + "");
-  if (onupdate != null) update = onupdate(update);
-  if (onexit == null) exit.remove();else onexit(exit);
-  return enter && update ? enter.merge(update).order() : update;
-}
-},{}],"node_modules/d3-selection/src/selection/merge.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _index = require("./index");
-
-function _default(selection) {
-  for (var groups0 = this._groups, groups1 = selection._groups, m0 = groups0.length, m1 = groups1.length, m = Math.min(m0, m1), merges = new Array(m0), j = 0; j < m; ++j) {
-    for (var group0 = groups0[j], group1 = groups1[j], n = group0.length, merge = merges[j] = new Array(n), node, i = 0; i < n; ++i) {
-      if (node = group0[i] || group1[i]) {
-        merge[i] = node;
-      }
-    }
-  }
-
-  for (; j < m0; ++j) {
-    merges[j] = groups0[j];
-  }
-
-  return new _index.Selection(merges, this._parents);
-}
-},{"./index":"node_modules/d3-selection/src/selection/index.js"}],"node_modules/d3-selection/src/selection/order.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default() {
-  for (var groups = this._groups, j = -1, m = groups.length; ++j < m;) {
-    for (var group = groups[j], i = group.length - 1, next = group[i], node; --i >= 0;) {
-      if (node = group[i]) {
-        if (next && node.compareDocumentPosition(next) ^ 4) next.parentNode.insertBefore(node, next);
-        next = node;
-      }
-    }
-  }
-
-  return this;
-}
-},{}],"node_modules/d3-selection/src/selection/sort.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _index = require("./index");
-
-function _default(compare) {
-  if (!compare) compare = ascending;
-
-  function compareNode(a, b) {
-    return a && b ? compare(a.__data__, b.__data__) : !a - !b;
-  }
-
-  for (var groups = this._groups, m = groups.length, sortgroups = new Array(m), j = 0; j < m; ++j) {
-    for (var group = groups[j], n = group.length, sortgroup = sortgroups[j] = new Array(n), node, i = 0; i < n; ++i) {
-      if (node = group[i]) {
-        sortgroup[i] = node;
-      }
-    }
-
-    sortgroup.sort(compareNode);
-  }
-
-  return new _index.Selection(sortgroups, this._parents).order();
-}
-
-function ascending(a, b) {
-  return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
-}
-},{"./index":"node_modules/d3-selection/src/selection/index.js"}],"node_modules/d3-selection/src/selection/call.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default() {
-  var callback = arguments[0];
-  arguments[0] = this;
-  callback.apply(null, arguments);
-  return this;
-}
-},{}],"node_modules/d3-selection/src/selection/nodes.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default() {
-  var nodes = new Array(this.size()),
-      i = -1;
-  this.each(function () {
-    nodes[++i] = this;
-  });
-  return nodes;
-}
-},{}],"node_modules/d3-selection/src/selection/node.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default() {
-  for (var groups = this._groups, j = 0, m = groups.length; j < m; ++j) {
-    for (var group = groups[j], i = 0, n = group.length; i < n; ++i) {
-      var node = group[i];
-      if (node) return node;
-    }
-  }
-
-  return null;
-}
-},{}],"node_modules/d3-selection/src/selection/size.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default() {
-  var size = 0;
-  this.each(function () {
-    ++size;
-  });
-  return size;
-}
-},{}],"node_modules/d3-selection/src/selection/empty.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default() {
-  return !this.node();
-}
-},{}],"node_modules/d3-selection/src/selection/each.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default(callback) {
-  for (var groups = this._groups, j = 0, m = groups.length; j < m; ++j) {
-    for (var group = groups[j], i = 0, n = group.length, node; i < n; ++i) {
-      if (node = group[i]) callback.call(node, node.__data__, i, group);
-    }
-  }
-
-  return this;
-}
-},{}],"node_modules/d3-selection/src/selection/attr.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _namespace = _interopRequireDefault(require("../namespace"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function attrRemove(name) {
-  return function () {
-    this.removeAttribute(name);
-  };
-}
-
-function attrRemoveNS(fullname) {
-  return function () {
-    this.removeAttributeNS(fullname.space, fullname.local);
-  };
-}
-
-function attrConstant(name, value) {
-  return function () {
-    this.setAttribute(name, value);
-  };
-}
-
-function attrConstantNS(fullname, value) {
-  return function () {
-    this.setAttributeNS(fullname.space, fullname.local, value);
-  };
-}
-
-function attrFunction(name, value) {
-  return function () {
-    var v = value.apply(this, arguments);
-    if (v == null) this.removeAttribute(name);else this.setAttribute(name, v);
-  };
-}
-
-function attrFunctionNS(fullname, value) {
-  return function () {
-    var v = value.apply(this, arguments);
-    if (v == null) this.removeAttributeNS(fullname.space, fullname.local);else this.setAttributeNS(fullname.space, fullname.local, v);
-  };
-}
-
-function _default(name, value) {
-  var fullname = (0, _namespace.default)(name);
-
-  if (arguments.length < 2) {
-    var node = this.node();
-    return fullname.local ? node.getAttributeNS(fullname.space, fullname.local) : node.getAttribute(fullname);
-  }
-
-  return this.each((value == null ? fullname.local ? attrRemoveNS : attrRemove : typeof value === "function" ? fullname.local ? attrFunctionNS : attrFunction : fullname.local ? attrConstantNS : attrConstant)(fullname, value));
-}
-},{"../namespace":"node_modules/d3-selection/src/namespace.js"}],"node_modules/d3-selection/src/window.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default(node) {
-  return node.ownerDocument && node.ownerDocument.defaultView || // node is a Node
-  node.document && node // node is a Window
-  || node.defaultView; // node is a Document
-}
-},{}],"node_modules/d3-selection/src/selection/style.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-exports.styleValue = styleValue;
-
-var _window = _interopRequireDefault(require("../window"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function styleRemove(name) {
-  return function () {
-    this.style.removeProperty(name);
-  };
-}
-
-function styleConstant(name, value, priority) {
-  return function () {
-    this.style.setProperty(name, value, priority);
-  };
-}
-
-function styleFunction(name, value, priority) {
-  return function () {
-    var v = value.apply(this, arguments);
-    if (v == null) this.style.removeProperty(name);else this.style.setProperty(name, v, priority);
-  };
-}
-
-function _default(name, value, priority) {
-  return arguments.length > 1 ? this.each((value == null ? styleRemove : typeof value === "function" ? styleFunction : styleConstant)(name, value, priority == null ? "" : priority)) : styleValue(this.node(), name);
-}
-
-function styleValue(node, name) {
-  return node.style.getPropertyValue(name) || (0, _window.default)(node).getComputedStyle(node, null).getPropertyValue(name);
-}
-},{"../window":"node_modules/d3-selection/src/window.js"}],"node_modules/d3-selection/src/selection/property.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function propertyRemove(name) {
-  return function () {
-    delete this[name];
-  };
-}
-
-function propertyConstant(name, value) {
-  return function () {
-    this[name] = value;
-  };
-}
-
-function propertyFunction(name, value) {
-  return function () {
-    var v = value.apply(this, arguments);
-    if (v == null) delete this[name];else this[name] = v;
-  };
-}
-
-function _default(name, value) {
-  return arguments.length > 1 ? this.each((value == null ? propertyRemove : typeof value === "function" ? propertyFunction : propertyConstant)(name, value)) : this.node()[name];
-}
-},{}],"node_modules/d3-selection/src/selection/classed.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function classArray(string) {
-  return string.trim().split(/^|\s+/);
-}
-
-function classList(node) {
-  return node.classList || new ClassList(node);
-}
-
-function ClassList(node) {
-  this._node = node;
-  this._names = classArray(node.getAttribute("class") || "");
-}
-
-ClassList.prototype = {
-  add: function (name) {
-    var i = this._names.indexOf(name);
-
-    if (i < 0) {
-      this._names.push(name);
-
-      this._node.setAttribute("class", this._names.join(" "));
-    }
-  },
-  remove: function (name) {
-    var i = this._names.indexOf(name);
-
-    if (i >= 0) {
-      this._names.splice(i, 1);
-
-      this._node.setAttribute("class", this._names.join(" "));
-    }
-  },
-  contains: function (name) {
-    return this._names.indexOf(name) >= 0;
-  }
-};
-
-function classedAdd(node, names) {
-  var list = classList(node),
-      i = -1,
-      n = names.length;
-
-  while (++i < n) list.add(names[i]);
-}
-
-function classedRemove(node, names) {
-  var list = classList(node),
-      i = -1,
-      n = names.length;
-
-  while (++i < n) list.remove(names[i]);
-}
-
-function classedTrue(names) {
-  return function () {
-    classedAdd(this, names);
-  };
-}
-
-function classedFalse(names) {
-  return function () {
-    classedRemove(this, names);
-  };
-}
-
-function classedFunction(names, value) {
-  return function () {
-    (value.apply(this, arguments) ? classedAdd : classedRemove)(this, names);
-  };
-}
-
-function _default(name, value) {
-  var names = classArray(name + "");
-
-  if (arguments.length < 2) {
-    var list = classList(this.node()),
-        i = -1,
-        n = names.length;
-
-    while (++i < n) if (!list.contains(names[i])) return false;
-
-    return true;
-  }
-
-  return this.each((typeof value === "function" ? classedFunction : value ? classedTrue : classedFalse)(names, value));
-}
-},{}],"node_modules/d3-selection/src/selection/text.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function textRemove() {
-  this.textContent = "";
-}
-
-function textConstant(value) {
-  return function () {
-    this.textContent = value;
-  };
-}
-
-function textFunction(value) {
-  return function () {
-    var v = value.apply(this, arguments);
-    this.textContent = v == null ? "" : v;
-  };
-}
-
-function _default(value) {
-  return arguments.length ? this.each(value == null ? textRemove : (typeof value === "function" ? textFunction : textConstant)(value)) : this.node().textContent;
-}
-},{}],"node_modules/d3-selection/src/selection/html.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function htmlRemove() {
-  this.innerHTML = "";
-}
-
-function htmlConstant(value) {
-  return function () {
-    this.innerHTML = value;
-  };
-}
-
-function htmlFunction(value) {
-  return function () {
-    var v = value.apply(this, arguments);
-    this.innerHTML = v == null ? "" : v;
-  };
-}
-
-function _default(value) {
-  return arguments.length ? this.each(value == null ? htmlRemove : (typeof value === "function" ? htmlFunction : htmlConstant)(value)) : this.node().innerHTML;
-}
-},{}],"node_modules/d3-selection/src/selection/raise.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function raise() {
-  if (this.nextSibling) this.parentNode.appendChild(this);
-}
-
-function _default() {
-  return this.each(raise);
-}
-},{}],"node_modules/d3-selection/src/selection/lower.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function lower() {
-  if (this.previousSibling) this.parentNode.insertBefore(this, this.parentNode.firstChild);
-}
-
-function _default() {
-  return this.each(lower);
-}
-},{}],"node_modules/d3-selection/src/selection/append.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _creator = _interopRequireDefault(require("../creator"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _default(name) {
-  var create = typeof name === "function" ? name : (0, _creator.default)(name);
-  return this.select(function () {
-    return this.appendChild(create.apply(this, arguments));
+    map.renderSync();
   });
 }
-},{"../creator":"node_modules/d3-selection/src/creator.js"}],"node_modules/d3-selection/src/selection/insert.js":[function(require,module,exports) {
+},{"file-saver":"node_modules/file-saver/dist/FileSaver.min.js","../events/Broker":"src/events/Broker.js","../events/Events":"src/events/Events.js"}],"src/map/draw-support.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = _default;
+exports.default = DrawSupport;
 
-var _creator = _interopRequireDefault(require("../creator"));
+var _Draw = _interopRequireDefault(require("ol/interaction/Draw"));
 
-var _selector = _interopRequireDefault(require("../selector"));
+var _Vector = _interopRequireDefault(require("ol/source/Vector"));
+
+var _Vector2 = _interopRequireDefault(require("ol/layer/Vector"));
+
+var _Broker = _interopRequireDefault(require("../events/Broker"));
+
+var _Events = _interopRequireDefault(require("../events/Events"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function constantNull() {
-  return null;
-}
-
-function _default(name, before) {
-  var create = typeof name === "function" ? name : (0, _creator.default)(name),
-      select = before == null ? constantNull : typeof before === "function" ? before : (0, _selector.default)(before);
-  return this.select(function () {
-    return this.insertBefore(create.apply(this, arguments), select.apply(this, arguments) || null);
+function DrawSupport(map) {
+  var vectorSource = new _Vector.default({
+    wrapX: false
   });
-}
-},{"../creator":"node_modules/d3-selection/src/creator.js","../selector":"node_modules/d3-selection/src/selector.js"}],"node_modules/d3-selection/src/selection/remove.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function remove() {
-  var parent = this.parentNode;
-  if (parent) parent.removeChild(this);
-}
-
-function _default() {
-  return this.each(remove);
-}
-},{}],"node_modules/d3-selection/src/selection/clone.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function selection_cloneShallow() {
-  return this.parentNode.insertBefore(this.cloneNode(false), this.nextSibling);
-}
-
-function selection_cloneDeep() {
-  return this.parentNode.insertBefore(this.cloneNode(true), this.nextSibling);
-}
-
-function _default(deep) {
-  return this.select(deep ? selection_cloneDeep : selection_cloneShallow);
-}
-},{}],"node_modules/d3-selection/src/selection/datum.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default(value) {
-  return arguments.length ? this.property("__data__", value) : this.node().__data__;
-}
-},{}],"node_modules/d3-selection/src/selection/on.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-exports.customEvent = customEvent;
-exports.event = void 0;
-var filterEvents = {};
-var event = null;
-exports.event = event;
-
-if (typeof document !== "undefined") {
-  var element = document.documentElement;
-
-  if (!("onmouseenter" in element)) {
-    filterEvents = {
-      mouseenter: "mouseover",
-      mouseleave: "mouseout"
-    };
-  }
-}
-
-function filterContextListener(listener, index, group) {
-  listener = contextListener(listener, index, group);
-  return function (event) {
-    var related = event.relatedTarget;
-
-    if (!related || related !== this && !(related.compareDocumentPosition(this) & 8)) {
-      listener.call(this, event);
-    }
-  };
-}
-
-function contextListener(listener, index, group) {
-  return function (event1) {
-    var event0 = event; // Events can be reentrant (e.g., focus).
-
-    exports.event = event = event1;
-
-    try {
-      listener.call(this, this.__data__, index, group);
-    } finally {
-      exports.event = event = event0;
-    }
-  };
-}
-
-function parseTypenames(typenames) {
-  return typenames.trim().split(/^|\s+/).map(function (t) {
-    var name = "",
-        i = t.indexOf(".");
-    if (i >= 0) name = t.slice(i + 1), t = t.slice(0, i);
-    return {
-      type: t,
-      name: name
-    };
+  var vectorLayer = new _Vector2.default({
+    source: vectorSource
   });
-}
-
-function onRemove(typename) {
-  return function () {
-    var on = this.__on;
-    if (!on) return;
-
-    for (var j = 0, i = -1, m = on.length, o; j < m; ++j) {
-      if (o = on[j], (!typename.type || o.type === typename.type) && o.name === typename.name) {
-        this.removeEventListener(o.type, o.listener, o.capture);
-      } else {
-        on[++i] = o;
-      }
-    }
-
-    if (++i) on.length = i;else delete this.__on;
-  };
-}
-
-function onAdd(typename, value, capture) {
-  var wrap = filterEvents.hasOwnProperty(typename.type) ? filterContextListener : contextListener;
-  return function (d, i, group) {
-    var on = this.__on,
-        o,
-        listener = wrap(value, i, group);
-    if (on) for (var j = 0, m = on.length; j < m; ++j) {
-      if ((o = on[j]).type === typename.type && o.name === typename.name) {
-        this.removeEventListener(o.type, o.listener, o.capture);
-        this.addEventListener(o.type, o.listener = listener, o.capture = capture);
-        o.value = value;
-        return;
-      }
-    }
-    this.addEventListener(typename.type, listener, capture);
-    o = {
-      type: typename.type,
-      name: typename.name,
-      value: value,
-      listener: listener,
-      capture: capture
-    };
-    if (!on) this.__on = [o];else on.push(o);
-  };
-}
-
-function _default(typename, value, capture) {
-  var typenames = parseTypenames(typename + ""),
-      i,
-      n = typenames.length,
-      t;
-
-  if (arguments.length < 2) {
-    var on = this.node().__on;
-
-    if (on) for (var j = 0, m = on.length, o; j < m; ++j) {
-      for (i = 0, o = on[j]; i < n; ++i) {
-        if ((t = typenames[i]).type === o.type && t.name === o.name) {
-          return o.value;
-        }
-      }
-    }
-    return;
-  }
-
-  on = value ? onAdd : onRemove;
-  if (capture == null) capture = false;
-
-  for (i = 0; i < n; ++i) this.each(on(typenames[i], value, capture));
-
-  return this;
-}
-
-function customEvent(event1, listener, that, args) {
-  var event0 = event;
-  event1.sourceEvent = event;
-  exports.event = event = event1;
-
-  try {
-    return listener.apply(that, args);
-  } finally {
-    exports.event = event = event0;
-  }
-}
-},{}],"node_modules/d3-selection/src/selection/dispatch.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _window = _interopRequireDefault(require("../window"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function dispatchEvent(node, type, params) {
-  var window = (0, _window.default)(node),
-      event = window.CustomEvent;
-
-  if (typeof event === "function") {
-    event = new event(type, params);
-  } else {
-    event = window.document.createEvent("Event");
-    if (params) event.initEvent(type, params.bubbles, params.cancelable), event.detail = params.detail;else event.initEvent(type, false, false);
-  }
-
-  node.dispatchEvent(event);
-}
-
-function dispatchConstant(type, params) {
-  return function () {
-    return dispatchEvent(this, type, params);
-  };
-}
-
-function dispatchFunction(type, params) {
-  return function () {
-    return dispatchEvent(this, type, params.apply(this, arguments));
-  };
-}
-
-function _default(type, params) {
-  return this.each((typeof params === "function" ? dispatchFunction : dispatchConstant)(type, params));
-}
-},{"../window":"node_modules/d3-selection/src/window.js"}],"node_modules/d3-selection/src/selection/index.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Selection = Selection;
-exports.default = exports.root = void 0;
-
-var _select = _interopRequireDefault(require("./select"));
-
-var _selectAll = _interopRequireDefault(require("./selectAll"));
-
-var _filter = _interopRequireDefault(require("./filter"));
-
-var _data = _interopRequireDefault(require("./data"));
-
-var _enter = _interopRequireDefault(require("./enter"));
-
-var _exit = _interopRequireDefault(require("./exit"));
-
-var _join = _interopRequireDefault(require("./join"));
-
-var _merge = _interopRequireDefault(require("./merge"));
-
-var _order = _interopRequireDefault(require("./order"));
-
-var _sort = _interopRequireDefault(require("./sort"));
-
-var _call = _interopRequireDefault(require("./call"));
-
-var _nodes = _interopRequireDefault(require("./nodes"));
-
-var _node = _interopRequireDefault(require("./node"));
-
-var _size = _interopRequireDefault(require("./size"));
-
-var _empty = _interopRequireDefault(require("./empty"));
-
-var _each = _interopRequireDefault(require("./each"));
-
-var _attr = _interopRequireDefault(require("./attr"));
-
-var _style = _interopRequireDefault(require("./style"));
-
-var _property = _interopRequireDefault(require("./property"));
-
-var _classed = _interopRequireDefault(require("./classed"));
-
-var _text = _interopRequireDefault(require("./text"));
-
-var _html = _interopRequireDefault(require("./html"));
-
-var _raise = _interopRequireDefault(require("./raise"));
-
-var _lower = _interopRequireDefault(require("./lower"));
-
-var _append = _interopRequireDefault(require("./append"));
-
-var _insert = _interopRequireDefault(require("./insert"));
-
-var _remove = _interopRequireDefault(require("./remove"));
-
-var _clone = _interopRequireDefault(require("./clone"));
-
-var _datum = _interopRequireDefault(require("./datum"));
-
-var _on = _interopRequireDefault(require("./on"));
-
-var _dispatch = _interopRequireDefault(require("./dispatch"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var root = [null];
-exports.root = root;
-
-function Selection(groups, parents) {
-  this._groups = groups;
-  this._parents = parents;
-}
-
-function selection() {
-  return new Selection([[document.documentElement]], root);
-}
-
-Selection.prototype = selection.prototype = {
-  constructor: Selection,
-  select: _select.default,
-  selectAll: _selectAll.default,
-  filter: _filter.default,
-  data: _data.default,
-  enter: _enter.default,
-  exit: _exit.default,
-  join: _join.default,
-  merge: _merge.default,
-  order: _order.default,
-  sort: _sort.default,
-  call: _call.default,
-  nodes: _nodes.default,
-  node: _node.default,
-  size: _size.default,
-  empty: _empty.default,
-  each: _each.default,
-  attr: _attr.default,
-  style: _style.default,
-  property: _property.default,
-  classed: _classed.default,
-  text: _text.default,
-  html: _html.default,
-  raise: _raise.default,
-  lower: _lower.default,
-  append: _append.default,
-  insert: _insert.default,
-  remove: _remove.default,
-  clone: _clone.default,
-  datum: _datum.default,
-  on: _on.default,
-  dispatch: _dispatch.default
-};
-var _default = selection;
-exports.default = _default;
-},{"./select":"node_modules/d3-selection/src/selection/select.js","./selectAll":"node_modules/d3-selection/src/selection/selectAll.js","./filter":"node_modules/d3-selection/src/selection/filter.js","./data":"node_modules/d3-selection/src/selection/data.js","./enter":"node_modules/d3-selection/src/selection/enter.js","./exit":"node_modules/d3-selection/src/selection/exit.js","./join":"node_modules/d3-selection/src/selection/join.js","./merge":"node_modules/d3-selection/src/selection/merge.js","./order":"node_modules/d3-selection/src/selection/order.js","./sort":"node_modules/d3-selection/src/selection/sort.js","./call":"node_modules/d3-selection/src/selection/call.js","./nodes":"node_modules/d3-selection/src/selection/nodes.js","./node":"node_modules/d3-selection/src/selection/node.js","./size":"node_modules/d3-selection/src/selection/size.js","./empty":"node_modules/d3-selection/src/selection/empty.js","./each":"node_modules/d3-selection/src/selection/each.js","./attr":"node_modules/d3-selection/src/selection/attr.js","./style":"node_modules/d3-selection/src/selection/style.js","./property":"node_modules/d3-selection/src/selection/property.js","./classed":"node_modules/d3-selection/src/selection/classed.js","./text":"node_modules/d3-selection/src/selection/text.js","./html":"node_modules/d3-selection/src/selection/html.js","./raise":"node_modules/d3-selection/src/selection/raise.js","./lower":"node_modules/d3-selection/src/selection/lower.js","./append":"node_modules/d3-selection/src/selection/append.js","./insert":"node_modules/d3-selection/src/selection/insert.js","./remove":"node_modules/d3-selection/src/selection/remove.js","./clone":"node_modules/d3-selection/src/selection/clone.js","./datum":"node_modules/d3-selection/src/selection/datum.js","./on":"node_modules/d3-selection/src/selection/on.js","./dispatch":"node_modules/d3-selection/src/selection/dispatch.js"}],"node_modules/d3-selection/src/select.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _index = require("./selection/index");
-
-function _default(selector) {
-  return typeof selector === "string" ? new _index.Selection([[document.querySelector(selector)]], [document.documentElement]) : new _index.Selection([[selector]], _index.root);
-}
-},{"./selection/index":"node_modules/d3-selection/src/selection/index.js"}],"node_modules/d3-selection/src/create.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _creator = _interopRequireDefault(require("./creator"));
-
-var _select = _interopRequireDefault(require("./select"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _default(name) {
-  return (0, _select.default)((0, _creator.default)(name).call(document.documentElement));
-}
-},{"./creator":"node_modules/d3-selection/src/creator.js","./select":"node_modules/d3-selection/src/select.js"}],"node_modules/d3-selection/src/local.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = local;
-var nextId = 0;
-
-function local() {
-  return new Local();
-}
-
-function Local() {
-  this._ = "@" + (++nextId).toString(36);
-}
-
-Local.prototype = local.prototype = {
-  constructor: Local,
-  get: function (node) {
-    var id = this._;
-
-    while (!(id in node)) if (!(node = node.parentNode)) return;
-
-    return node[id];
-  },
-  set: function (node, value) {
-    return node[this._] = value;
-  },
-  remove: function (node) {
-    return this._ in node && delete node[this._];
-  },
-  toString: function () {
-    return this._;
-  }
-};
-},{}],"node_modules/d3-selection/src/sourceEvent.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _on = require("./selection/on");
-
-function _default() {
-  var current = _on.event,
-      source;
-
-  while (source = current.sourceEvent) current = source;
-
-  return current;
-}
-},{"./selection/on":"node_modules/d3-selection/src/selection/on.js"}],"node_modules/d3-selection/src/point.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default(node, event) {
-  var svg = node.ownerSVGElement || node;
-
-  if (svg.createSVGPoint) {
-    var point = svg.createSVGPoint();
-    point.x = event.clientX, point.y = event.clientY;
-    point = point.matrixTransform(node.getScreenCTM().inverse());
-    return [point.x, point.y];
-  }
-
-  var rect = node.getBoundingClientRect();
-  return [event.clientX - rect.left - node.clientLeft, event.clientY - rect.top - node.clientTop];
-}
-},{}],"node_modules/d3-selection/src/mouse.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _sourceEvent = _interopRequireDefault(require("./sourceEvent"));
-
-var _point = _interopRequireDefault(require("./point"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _default(node) {
-  var event = (0, _sourceEvent.default)();
-  if (event.changedTouches) event = event.changedTouches[0];
-  return (0, _point.default)(node, event);
-}
-},{"./sourceEvent":"node_modules/d3-selection/src/sourceEvent.js","./point":"node_modules/d3-selection/src/point.js"}],"node_modules/d3-selection/src/selectAll.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _index = require("./selection/index");
-
-function _default(selector) {
-  return typeof selector === "string" ? new _index.Selection([document.querySelectorAll(selector)], [document.documentElement]) : new _index.Selection([selector == null ? [] : selector], _index.root);
-}
-},{"./selection/index":"node_modules/d3-selection/src/selection/index.js"}],"node_modules/d3-selection/src/touch.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _sourceEvent = _interopRequireDefault(require("./sourceEvent"));
-
-var _point = _interopRequireDefault(require("./point"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _default(node, touches, identifier) {
-  if (arguments.length < 3) identifier = touches, touches = (0, _sourceEvent.default)().changedTouches;
-
-  for (var i = 0, n = touches ? touches.length : 0, touch; i < n; ++i) {
-    if ((touch = touches[i]).identifier === identifier) {
-      return (0, _point.default)(node, touch);
-    }
-  }
-
-  return null;
-}
-},{"./sourceEvent":"node_modules/d3-selection/src/sourceEvent.js","./point":"node_modules/d3-selection/src/point.js"}],"node_modules/d3-selection/src/touches.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _sourceEvent = _interopRequireDefault(require("./sourceEvent"));
-
-var _point = _interopRequireDefault(require("./point"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _default(node, touches) {
-  if (touches == null) touches = (0, _sourceEvent.default)().touches;
-
-  for (var i = 0, n = touches ? touches.length : 0, points = new Array(n); i < n; ++i) {
-    points[i] = (0, _point.default)(node, touches[i]);
-  }
-
-  return points;
-}
-},{"./sourceEvent":"node_modules/d3-selection/src/sourceEvent.js","./point":"node_modules/d3-selection/src/point.js"}],"node_modules/d3-selection/src/index.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-Object.defineProperty(exports, "create", {
-  enumerable: true,
-  get: function () {
-    return _create.default;
-  }
-});
-Object.defineProperty(exports, "creator", {
-  enumerable: true,
-  get: function () {
-    return _creator.default;
-  }
-});
-Object.defineProperty(exports, "local", {
-  enumerable: true,
-  get: function () {
-    return _local.default;
-  }
-});
-Object.defineProperty(exports, "matcher", {
-  enumerable: true,
-  get: function () {
-    return _matcher.default;
-  }
-});
-Object.defineProperty(exports, "mouse", {
-  enumerable: true,
-  get: function () {
-    return _mouse.default;
-  }
-});
-Object.defineProperty(exports, "namespace", {
-  enumerable: true,
-  get: function () {
-    return _namespace.default;
-  }
-});
-Object.defineProperty(exports, "namespaces", {
-  enumerable: true,
-  get: function () {
-    return _namespaces.default;
-  }
-});
-Object.defineProperty(exports, "clientPoint", {
-  enumerable: true,
-  get: function () {
-    return _point.default;
-  }
-});
-Object.defineProperty(exports, "select", {
-  enumerable: true,
-  get: function () {
-    return _select.default;
-  }
-});
-Object.defineProperty(exports, "selectAll", {
-  enumerable: true,
-  get: function () {
-    return _selectAll.default;
-  }
-});
-Object.defineProperty(exports, "selection", {
-  enumerable: true,
-  get: function () {
-    return _index.default;
-  }
-});
-Object.defineProperty(exports, "selector", {
-  enumerable: true,
-  get: function () {
-    return _selector.default;
-  }
-});
-Object.defineProperty(exports, "selectorAll", {
-  enumerable: true,
-  get: function () {
-    return _selectorAll.default;
-  }
-});
-Object.defineProperty(exports, "style", {
-  enumerable: true,
-  get: function () {
-    return _style.styleValue;
-  }
-});
-Object.defineProperty(exports, "touch", {
-  enumerable: true,
-  get: function () {
-    return _touch.default;
-  }
-});
-Object.defineProperty(exports, "touches", {
-  enumerable: true,
-  get: function () {
-    return _touches.default;
-  }
-});
-Object.defineProperty(exports, "window", {
-  enumerable: true,
-  get: function () {
-    return _window.default;
-  }
-});
-Object.defineProperty(exports, "event", {
-  enumerable: true,
-  get: function () {
-    return _on.event;
-  }
-});
-Object.defineProperty(exports, "customEvent", {
-  enumerable: true,
-  get: function () {
-    return _on.customEvent;
-  }
-});
-
-var _create = _interopRequireDefault(require("./create"));
-
-var _creator = _interopRequireDefault(require("./creator"));
-
-var _local = _interopRequireDefault(require("./local"));
-
-var _matcher = _interopRequireDefault(require("./matcher"));
-
-var _mouse = _interopRequireDefault(require("./mouse"));
-
-var _namespace = _interopRequireDefault(require("./namespace"));
-
-var _namespaces = _interopRequireDefault(require("./namespaces"));
-
-var _point = _interopRequireDefault(require("./point"));
-
-var _select = _interopRequireDefault(require("./select"));
-
-var _selectAll = _interopRequireDefault(require("./selectAll"));
-
-var _index = _interopRequireDefault(require("./selection/index"));
-
-var _selector = _interopRequireDefault(require("./selector"));
-
-var _selectorAll = _interopRequireDefault(require("./selectorAll"));
-
-var _style = require("./selection/style");
-
-var _touch = _interopRequireDefault(require("./touch"));
-
-var _touches = _interopRequireDefault(require("./touches"));
-
-var _window = _interopRequireDefault(require("./window"));
-
-var _on = require("./selection/on");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./create":"node_modules/d3-selection/src/create.js","./creator":"node_modules/d3-selection/src/creator.js","./local":"node_modules/d3-selection/src/local.js","./matcher":"node_modules/d3-selection/src/matcher.js","./mouse":"node_modules/d3-selection/src/mouse.js","./namespace":"node_modules/d3-selection/src/namespace.js","./namespaces":"node_modules/d3-selection/src/namespaces.js","./point":"node_modules/d3-selection/src/point.js","./select":"node_modules/d3-selection/src/select.js","./selectAll":"node_modules/d3-selection/src/selectAll.js","./selection/index":"node_modules/d3-selection/src/selection/index.js","./selector":"node_modules/d3-selection/src/selector.js","./selectorAll":"node_modules/d3-selection/src/selectorAll.js","./selection/style":"node_modules/d3-selection/src/selection/style.js","./touch":"node_modules/d3-selection/src/touch.js","./touches":"node_modules/d3-selection/src/touches.js","./window":"node_modules/d3-selection/src/window.js","./selection/on":"node_modules/d3-selection/src/selection/on.js"}],"src/Broker.js":[function(require,module,exports) {
-var listeners = {};
-module.exports = {
-  on: function on(evt, func) {
-    !listeners[evt] && (listeners[evt] = []);
-    listeners[evt].push(func);
-  },
-  off: function off(evt, func) {
-    listeners[evt] && listeners[evt].remove(func);
-  },
-  fire: function fire(evt, arg) {
-    listeners[evt] && listeners[evt].forEach(function (listener) {
-      listener(arg);
+  map.addLayer(vectorLayer);
+  var drawSupport;
+
+  _Broker.default.on(_Events.default.DRAW_MODE, function (mode) {
+    // 'Polygon', 'LineString'
+    drawSupport && map.removeInteraction(drawSupport);
+    drawSupport = new _Draw.default({
+      source: vectorSource,
+      type: mode,
+      condition: end
     });
+    map.addInteraction(drawSupport);
+  });
+
+  function end(e) {
+    return e.pointerEvent.buttons === 1;
   }
-};
-},{}],"src/Events.js":[function(require,module,exports) {
-module.exports = {
-  LAYER_CHANGE: 'layer-change'
-};
-},{}],"src/SvgPaths.js":[function(require,module,exports) {
-module.exports = {
-  map: "M 23.125 0 C 22.957031 0.0195313 22.792969 0.0859375 22.65625 0.1875 L 0.40625 17.25 C 0.109375 17.480469 -0.03125 17.859375 0.0429688 18.230469 C 0.113281 18.601563 0.386719 18.898438 0.75 19 L 10.46875 21.5 L 0.40625 29.25 C 0.109375 29.480469 -0.03125 29.859375 0.0429688 30.230469 C 0.113281 30.601563 0.386719 30.898438 0.75 31 L 10.5 33.53125 L 0.40625 41.21875 C 0.0898438 41.445313 -0.0625 41.835938 0.0078125 42.21875 C 0.0820313 42.601563 0.371094 42.90625 0.75 43 L 27.75 49.96875 C 28.085938 50.054688 28.4375 49.957031 28.6875 49.71875 L 49.6875 30.09375 C 49.96875 29.832031 50.074219 29.433594 49.960938 29.066406 C 49.847656 28.703125 49.535156 28.433594 49.15625 28.375 L 40.28125 26.875 L 49.6875 18.09375 C 49.96875 17.832031 50.074219 17.433594 49.960938 17.066406 C 49.847656 16.703125 49.535156 16.433594 49.15625 16.375 L 40.3125 14.875 L 49.6875 6.09375 C 49.96875 5.832031 50.074219 5.433594 49.960938 5.066406 C 49.847656 4.703125 49.535156 4.433594 49.15625 4.375 L 23.4375 0 C 23.332031 -0.015625 23.230469 -0.015625 23.125 0 Z M 23.53125 2.03125 L 27.09375 2.625 C 27.042969 2.746094 27 2.863281 27 3 C 27 3.550781 27.449219 4 28 4 C 28.550781 4 29 3.550781 29 3 C 29 2.988281 29 2.980469 29 2.96875 L 33.25 3.6875 C 33.433594 3.886719 33.707031 4 34 4 C 34.152344 4 34.277344 3.9375 34.40625 3.875 L 42.375 5.25 C 42.152344 5.433594 42 5.691406 42 6 C 42 6.550781 42.449219 7 43 7 C 43.550781 7 44 6.550781 44 6 C 44 5.8125 43.933594 5.648438 43.84375 5.5 L 46.84375 6 L 37.625 14.625 C 37.570313 14.660156 37.515625 14.703125 37.46875 14.75 C 37.410156 14.796875 37.359375 14.847656 37.3125 14.90625 C 37.300781 14.925781 37.289063 14.949219 37.28125 14.96875 L 27.71875 23.90625 L 25.78125 23.40625 C 25.597656 23.164063 25.324219 23 25 23 C 24.863281 23 24.746094 23.042969 24.625 23.09375 L 16.96875 21.125 C 16.976563 21.082031 17 21.046875 17 21 C 17 20.449219 16.550781 20 16 20 C 15.585938 20 15.246094 20.265625 15.09375 20.625 L 13.21875 20.15625 C 13.199219 20.144531 13.175781 20.132813 13.15625 20.125 L 12.8125 20.0625 C 12.78125 20.050781 12.75 20.039063 12.71875 20.03125 L 7.71875 18.71875 C 7.898438 18.539063 8 18.277344 8 18 C 8 17.449219 7.550781 17 7 17 C 6.449219 17 6 17.449219 6 18 C 6 18.113281 6.027344 18.210938 6.0625 18.3125 L 3.21875 17.5625 L 15.21875 8.375 C 15.082031 8.546875 15 8.761719 15 9 C 15 9.550781 15.449219 10 16 10 C 16.550781 10 17 9.550781 17 9 C 17 8.449219 16.550781 8 16 8 C 15.863281 8 15.746094 8.042969 15.625 8.09375 L 18.0625 6.21875 C 18.167969 6.65625 18.527344 7 19 7 C 19.550781 7 20 6.550781 20 6 C 20 5.625 19.773438 5.328125 19.46875 5.15625 L 21.3125 3.71875 C 21.492188 3.886719 21.734375 4 22 4 C 22.550781 4 23 3.550781 23 3 C 23 2.828125 22.953125 2.671875 22.875 2.53125 Z M 25 5 C 24.449219 5 24 5.449219 24 6 C 24 6.550781 24.449219 7 25 7 C 25.550781 7 26 6.550781 26 6 C 26 5.449219 25.550781 5 25 5 Z M 31 5 C 30.449219 5 30 5.449219 30 6 C 30 6.550781 30.449219 7 31 7 C 31.550781 7 32 6.550781 32 6 C 32 5.449219 31.550781 5 31 5 Z M 37 5 C 36.449219 5 36 5.449219 36 6 C 36 6.550781 36.449219 7 37 7 C 37.550781 7 38 6.550781 38 6 C 38 5.449219 37.550781 5 37 5 Z M 22 8 C 21.449219 8 21 8.449219 21 9 C 21 9.550781 21.449219 10 22 10 C 22.550781 10 23 9.550781 23 9 C 23 8.449219 22.550781 8 22 8 Z M 28 8 C 27.449219 8 27 8.449219 27 9 C 27 9.550781 27.449219 10 28 10 C 28.550781 10 29 9.550781 29 9 C 29 8.449219 28.550781 8 28 8 Z M 34 8 C 33.449219 8 33 8.449219 33 9 C 33 9.550781 33.449219 10 34 10 C 34.550781 10 35 9.550781 35 9 C 35 8.449219 34.550781 8 34 8 Z M 40 8 C 39.449219 8 39 8.449219 39 9 C 39 9.550781 39.449219 10 40 10 C 40.550781 10 41 9.550781 41 9 C 41 8.449219 40.550781 8 40 8 Z M 13 11 C 12.449219 11 12 11.449219 12 12 C 12 12.550781 12.449219 13 13 13 C 13.550781 13 14 12.550781 14 12 C 14 11.449219 13.550781 11 13 11 Z M 19 11 C 18.449219 11 18 11.449219 18 12 C 18 12.550781 18.449219 13 19 13 C 19.550781 13 20 12.550781 20 12 C 20 11.449219 19.550781 11 19 11 Z M 25 11 C 24.449219 11 24 11.449219 24 12 C 24 12.550781 24.449219 13 25 13 C 25.550781 13 26 12.550781 26 12 C 26 11.449219 25.550781 11 25 11 Z M 31 11 C 30.449219 11 30 11.449219 30 12 C 30 12.550781 30.449219 13 31 13 C 31.550781 13 32 12.550781 32 12 C 32 11.449219 31.550781 11 31 11 Z M 37 11 C 36.449219 11 36 11.449219 36 12 C 36 12.550781 36.449219 13 37 13 C 37.550781 13 38 12.550781 38 12 C 38 11.449219 37.550781 11 37 11 Z M 10 14 C 9.449219 14 9 14.449219 9 15 C 9 15.550781 9.449219 16 10 16 C 10.550781 16 11 15.550781 11 15 C 11 14.449219 10.550781 14 10 14 Z M 16 14 C 15.449219 14 15 14.449219 15 15 C 15 15.550781 15.449219 16 16 16 C 16.550781 16 17 15.550781 17 15 C 17 14.449219 16.550781 14 16 14 Z M 22 14 C 21.449219 14 21 14.449219 21 15 C 21 15.550781 21.449219 16 22 16 C 22.550781 16 23 15.550781 23 15 C 23 14.449219 22.550781 14 22 14 Z M 28 14 C 27.449219 14 27 14.449219 27 15 C 27 15.550781 27.449219 16 28 16 C 28.550781 16 29 15.550781 29 15 C 29 14.449219 28.550781 14 28 14 Z M 34 14 C 33.449219 14 33 14.449219 33 15 C 33 15.550781 33.449219 16 34 16 C 34.550781 16 35 15.550781 35 15 C 35 14.449219 34.550781 14 34 14 Z M 38.46875 16.59375 L 46.84375 18 L 37.6875 26.59375 C 37.664063 26.613281 37.644531 26.632813 37.625 26.65625 L 37.59375 26.65625 C 37.421875 26.75 37.28125 26.890625 37.1875 27.0625 L 27.71875 35.90625 L 3.21875 29.5625 L 12.9375 22.15625 L 27.75 25.96875 C 28.085938 26.054688 28.4375 25.957031 28.6875 25.71875 Z M 13 17 C 12.449219 17 12 17.449219 12 18 C 12 18.550781 12.449219 19 13 19 C 13.550781 19 14 18.550781 14 18 C 14 17.449219 13.550781 17 13 17 Z M 19 17 C 18.449219 17 18 17.449219 18 18 C 18 18.550781 18.449219 19 19 19 C 19.550781 19 20 18.550781 20 18 C 20 17.449219 19.550781 17 19 17 Z M 25 17 C 24.449219 17 24 17.449219 24 18 C 24 18.550781 24.449219 19 25 19 C 25.550781 19 26 18.550781 26 18 C 26 17.449219 25.550781 17 25 17 Z M 31 17 C 30.449219 17 30 17.449219 30 18 C 30 18.550781 30.449219 19 31 19 C 31.550781 19 32 18.550781 32 18 C 32 17.449219 31.550781 17 31 17 Z M 22 20 C 21.449219 20 21 20.449219 21 21 C 21 21.550781 21.449219 22 22 22 C 22.550781 22 23 21.550781 23 21 C 23 20.449219 22.550781 20 22 20 Z M 28 20 C 27.449219 20 27 20.449219 27 21 C 27 21.550781 27.449219 22 28 22 C 28.550781 22 29 21.550781 29 21 C 29 20.449219 28.550781 20 28 20 Z M 38.4375 28.59375 L 46.84375 30 L 27.6875 47.875 L 3.21875 41.5625 L 12.71875 34.3125 C 12.789063 34.269531 12.851563 34.214844 12.90625 34.15625 L 27.75 37.96875 C 28.085938 38.054688 28.4375 37.957031 28.6875 37.71875 Z "
-};
-},{}],"src/LayerPicker.js":[function(require,module,exports) {
+}
+},{"ol/interaction/Draw":"node_modules/ol/interaction/Draw.js","ol/source/Vector":"node_modules/ol/source/Vector.js","ol/layer/Vector":"node_modules/ol/layer/Vector.js","../events/Broker":"src/events/Broker.js","../events/Events":"src/events/Events.js"}],"src/map/map.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = LayerPicker;
-
-var _d3Selection = require("d3-selection");
-
-var _Broker = _interopRequireDefault(require("./Broker"));
-
-var _Events = _interopRequireDefault(require("./Events"));
-
-var _SvgPaths = _interopRequireDefault(require("./SvgPaths"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function LayerPicker(config) {
-  var div = (0, _d3Selection.select)('#' + config.target).append('div').classed('layer-picker-container', true);
-  var svg = div.append('svg').classed('layer-picker-button', true).attr('width', 50).attr('height', 50);
-  svg.append('path').attr('d', _SvgPaths.default.map);
-  var picker = div.append('div').classed('layer-picker-body', true).datum({
-    visible: false
-  });
-  var btns = picker.selectAll('div.layer-button').data(config.buttons).enter().append('span').classed('layer-button', true).attr('title', function (d) {
-    return d.title;
-  }).on('click', function (d) {
-    toggle(d);
-
-    _Broker.default.fire(_Events.default.LAYER_CHANGE, d);
-
-    btns.classed('active', false);
-    (0, _d3Selection.select)(this).classed('active', true);
-  }).each(function (d) {
-    var btn = (0, _d3Selection.select)(this).classed('active', config.active === d.id);
-    btn.append('img').attr('src', d.img);
-    btn.append('div').classed('layer-picker-button-text', true).html(d.title);
-  });
-  updateVisibility();
-  svg.on('click', toggle);
-
-  function toggle() {
-    picker.datum().visible = !picker.datum().visible;
-    updateVisibility();
-  }
-
-  function updateVisibility() {
-    picker.style('display', function (d) {
-      return d.visible ? 'block' : 'none';
-    });
-  }
-}
-},{"d3-selection":"node_modules/d3-selection/src/index.js","./Broker":"src/Broker.js","./Events":"src/Events.js","./SvgPaths":"src/SvgPaths.js"}],"src/index.js":[function(require,module,exports) {
-"use strict";
+exports.default = OL;
 
 require("ol/ol.css");
 
@@ -66588,137 +66800,145 @@ var _WMTS2 = _interopRequireDefault(require("ol/tilegrid/WMTS"));
 
 var _Image = _interopRequireDefault(require("ol/layer/Image"));
 
-var _LayerPicker = _interopRequireDefault(require("./LayerPicker"));
+var _XYZ = _interopRequireDefault(require("ol/source/XYZ"));
 
-var _Events = _interopRequireDefault(require("./Events"));
+var _screenShotSupport = _interopRequireDefault(require("./screen-shot-support"));
 
-var _Broker = _interopRequireDefault(require("./Broker"));
+var _drawSupport = _interopRequireDefault(require("./draw-support"));
+
+var _Events = _interopRequireDefault(require("../events/Events"));
+
+var _Broker = _interopRequireDefault(require("../events/Broker"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var projection = (0, _proj.get)('EPSG:3857');
-var projectionExtent = projection.getExtent();
-var size = (0, _extent.getWidth)(projectionExtent) / 256;
-var resolutions = new Array(14);
-var matrixIds = new Array(14);
+function OL(divId) {
+  var projection = (0, _proj.get)('EPSG:3857');
+  var projectionExtent = projection.getExtent();
+  var size = (0, _extent.getWidth)(projectionExtent) / 256;
+  var resolutions = new Array(14);
+  var matrixIds = new Array(14);
 
-for (var z = 0; z < 14; ++z) {
-  // generate resolutions and matrixIds arrays for this WMTS
-  resolutions[z] = size / Math.pow(2, z);
-  matrixIds[z] = z;
-}
+  for (var z = 0; z < 14; ++z) {
+    // generate resolutions and matrixIds arrays for this WMTS
+    resolutions[z] = size / Math.pow(2, z);
+    matrixIds[z] = z;
+  }
 
-window.map = new _ol2.Map({
-  controls: [],
-  layers: [new _Tile.default({
-    source: new _OSM.default()
-  }), new _Tile.default({
-    opacity: 0.7,
-    source: new _WMTS.default({
-      attributions: 'Tiles © <a href="https://services.arcgisonline.com/arcgis/rest/' + 'services/Demographics/USA_Population_Density/MapServer/">ArcGIS</a>',
-      url: 'https://services.arcgisonline.com/arcgis/rest/' + 'services/Demographics/USA_Population_Density/MapServer/WMTS/',
-      layer: '0',
-      matrixSet: 'EPSG:3857',
-      format: 'image/png',
-      projection: projection,
-      tileGrid: new _WMTS2.default({
-        origin: (0, _extent.getTopLeft)(projectionExtent),
-        resolutions: resolutions,
-        matrixIds: matrixIds
-      }),
-      style: 'default',
-      wrapX: true
+  var background = new _Tile.default({
+    title: 'OSM',
+    type: 'base',
+    visible: true,
+    source: new _XYZ.default({
+      url: '//{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      crossOrigin: 'Anonymous'
     })
-  }), new _Tile.default({
-    opacity: 0.7,
-    source: new _WMTS.default({
-      attributions: 'Tiles © <a href="https://services.arcgisonline.com/arcgis/rest/' + 'services/Demographics/USA_Population_Density/MapServer/">ArcGIS</a>',
-      url: 'https://services.arcgisonline.com/arcgis/rest/' + 'services/Demographics/USA_Population_Density/MapServer/WMTS/',
-      layer: '0',
-      matrixSet: 'EPSG:3857',
-      format: 'image/png',
-      projection: projection,
-      tileGrid: new _WMTS2.default({
-        origin: (0, _extent.getTopLeft)(projectionExtent),
-        resolutions: resolutions,
-        matrixIds: matrixIds
-      }),
-      style: 'default',
-      wrapX: true
-    })
-  }), new _Image.default({
-    opacity: 0.7,
-    extent: [-13884991, 2870341, -7455066, 6338219],
-    source: new _ImageWMS.default({
-      url: 'http://demo.boundlessgeo.com/geoserver/wms',
-      params: {
-        'LAYERS': 'topp:states'
-      },
-      serverType: 'geoserver'
-    })
-  })],
-  target: 'map',
-  view: new _ol2.View({
-    center: [4187241, 7508844],
-    zoom: 15
-  })
-});
-var wmtsLayers = [{
-  url: 'https://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Population_Density/MapServer/WMTS'
-}, {
-  url: 'https://api.codetabs.com/v1/proxy?quest=http://tomsk.geoscan.aero/wmts/75/105?REQUEST=GetCapabilities'
-}, {
-  url: 'https://api.codetabs.com/v1/proxy?quest=http://tomsk.geoscan.aero/wmts/75/103?REQUEST=GetCapabilities'
-}, {
-  url: 'https://api.codetabs.com/v1/proxy?quest=http://tomsk.geoscan.aero/wmts/75/104?REQUEST=GetCapabilities'
-}];
-var parser = new _WMTSCapabilities.default();
-wmtsLayers.forEach(function (wmtsLayer) {
-  fetch(wmtsLayer.url).then(function (response) {
-    return response.text();
-  }).then(function (text) {
-    /// FIXME proxy to prevent CORS issue for tomsk.geoscan.aero
-    var proxy = 'http://monichev.ddns.net/http://tomsk.geoscan.aero';
-    text = text.replace(/http:\/\/tomsk.geoscan.aero:80|https:\/\/tomsk.geoscan.aero:443|http:\/\/tomsk.geoscan.aero/g, proxy); ///
+  });
+  var view = new _ol2.View({
+    center: [0, 0],
+    zoom: 2
+  });
+  var map = new _ol2.Map({
+    controls: [],
+    layers: [background, new _Tile.default({
+      opacity: 0.7,
+      source: new _WMTS.default({
+        attributions: 'Tiles © <a href="https://services.arcgisonline.com/arcgis/rest/' + 'services/Demographics/USA_Population_Density/MapServer/">ArcGIS</a>',
+        url: 'https://services.arcgisonline.com/arcgis/rest/' + 'services/Demographics/USA_Population_Density/MapServer/WMTS/',
+        layer: '0',
+        matrixSet: 'EPSG:3857',
+        format: 'image/png',
+        projection: projection,
+        tileGrid: new _WMTS2.default({
+          origin: (0, _extent.getTopLeft)(projectionExtent),
+          resolutions: resolutions,
+          matrixIds: matrixIds
+        }),
+        style: 'default',
+        wrapX: true,
+        crossOrigin: 'Anonymous'
+      })
+    }), new _Image.default({
+      opacity: 0.3,
+      extent: [-13884991, 2870341, -7455066, 6338219],
+      source: new _ImageWMS.default({
+        url: 'https://ahocevar.com/geoserver/wms',
+        params: {
+          'LAYERS': 'topp:states'
+        },
+        serverType: 'geoserver',
+        crossOrigin: 'Anonymous'
+      })
+    })],
+    target: divId,
+    view: view
+  });
+  var wmtsLayers = [{
+    url: 'https://api.codetabs.com/v1/proxy?quest=http://tomsk.geoscan.aero/wmts/75/103?REQUEST=GetCapabilities'
+  }];
+  var parser = new _WMTSCapabilities.default();
+  wmtsLayers.forEach(function (wmtsLayer) {
+    fetch(wmtsLayer.url).then(function (response) {
+      return response.text();
+    }).then(function (text) {
+      /// FIXME proxy to prevent CORS issue for tomsk.geoscan.aero
+      var proxy = 'http://monichev.ddns.net/http://tomsk.geoscan.aero';
+      text = text.replace(/http:\/\/tomsk.geoscan.aero:80|https:\/\/tomsk.geoscan.aero:443|http:\/\/tomsk.geoscan.aero/g, proxy); ///
 
-    var result = parser.read(text);
+      var result = parser.read(text);
 
-    if (!wmtsLayer.config) {
-      wmtsLayer.config = {
-        layer: result.Contents.Layer[0].Identifier,
-        matrixSet: result.Contents.Layer[0].TileMatrixSetLink[0].TileMatrixSet
-      };
-    }
+      if (!wmtsLayer.config) {
+        wmtsLayer.config = {
+          layer: result.Contents.Layer[0].Identifier,
+          matrixSet: result.Contents.Layer[0].TileMatrixSetLink[0].TileMatrixSet
+        };
+      }
 
-    var options = (0, _WMTS.optionsFromCapabilities)(result, wmtsLayer.config);
-    map.addLayer(new _Tile.default({
-      source: new _WMTS.default(options)
+      var options = (0, _WMTS.optionsFromCapabilities)(result, wmtsLayer.config);
+      options.crossOrigin = 'Anonymous';
+      map.addLayer(new _Tile.default({
+        source: new _WMTS.default(options)
+      }));
+    });
+  });
+  (0, _screenShotSupport.default)(map);
+  (0, _drawSupport.default)(map);
+
+  _Broker.default.on(_Events.default.LAYER_CHANGE, function (e) {
+    background.setSource(new _XYZ.default({
+      url: e.url,
+      type: 'base',
+      visible: true,
+      crossOrigin: 'Anonymous'
     }));
   });
-});
 
-_Broker.default.on(_Events.default.LAYER_CHANGE, function (e) {
-  console.log(e);
-});
+  _Broker.default.on(_Events.default.MAP_FLY_TO, function (e) {
+    view.animate(e);
+  });
 
-(0, _LayerPicker.default)({
-  target: 'map',
-  active: 'worldmap',
-  buttons: [{
-    id: 'osm',
-    title: 'Опэн Стрит Мап',
-    img: 'https://strangerintheq.github.io/coco/images/layers/openStreetMap.png',
-    url: ''
-  }, {
-    id: 'worldmap',
-    title: 'Еще карта с пипец каким длинным названием',
-    img: 'https://strangerintheq.github.io/coco/images/layers/worldMap.png',
-    url: ''
-  }]
-});
-},{"ol/ol.css":"node_modules/ol/ol.css","ol":"node_modules/ol/index.js","ol/extent":"node_modules/ol/extent.js","ol/layer/Tile":"node_modules/ol/layer/Tile.js","ol/proj":"node_modules/ol/proj.js","ol/source/OSM":"node_modules/ol/source/OSM.js","ol/source/WMTS":"node_modules/ol/source/WMTS.js","ol/format/WMTSCapabilities":"node_modules/ol/format/WMTSCapabilities.js","ol/source/ImageWMS":"node_modules/ol/source/ImageWMS.js","ol/tilegrid/WMTS":"node_modules/ol/tilegrid/WMTS.js","ol/layer/Image":"node_modules/ol/layer/Image.js","./LayerPicker":"src/LayerPicker.js","./Events":"src/Events.js","./Broker":"src/Broker.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+  return map;
+}
+},{"ol/ol.css":"node_modules/ol/ol.css","ol":"node_modules/ol/index.js","ol/extent":"node_modules/ol/extent.js","ol/layer/Tile":"node_modules/ol/layer/Tile.js","ol/proj":"node_modules/ol/proj.js","ol/source/OSM":"node_modules/ol/source/OSM.js","ol/source/WMTS":"node_modules/ol/source/WMTS.js","ol/format/WMTSCapabilities":"node_modules/ol/format/WMTSCapabilities.js","ol/source/ImageWMS":"node_modules/ol/source/ImageWMS.js","ol/tilegrid/WMTS":"node_modules/ol/tilegrid/WMTS.js","ol/layer/Image":"node_modules/ol/layer/Image.js","ol/source/XYZ":"node_modules/ol/source/XYZ.js","./screen-shot-support":"src/map/screen-shot-support.js","./draw-support":"src/map/draw-support.js","../events/Events":"src/events/Events.js","../events/Broker":"src/events/Broker.js"}],"src/index.js":[function(require,module,exports) {
+"use strict";
+
+var _gui = _interopRequireDefault(require("./ui/gui"));
+
+var _map = _interopRequireDefault(require("./map/map"));
+
+var _Broker = _interopRequireDefault(require("./events/Broker"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var targetDivId = 'map';
+window.sputnik = {
+  map: (0, _map.default)(targetDivId),
+  broker: _Broker.default
+};
+(0, _gui.default)(targetDivId, window.sputnik.map);
+},{"./ui/gui":"src/ui/gui.js","./map/map":"src/map/map.js","./events/Broker":"src/events/Broker.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -66745,7 +66965,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64638" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54650" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
