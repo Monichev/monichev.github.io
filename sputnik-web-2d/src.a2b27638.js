@@ -1998,7 +1998,59 @@ function MapFlyToButton() {
     }
   };
 }
-},{"./map-fly-to.svg":"src/ui/map-fly-to/map-fly-to.svg","../../events/Broker":"src/events/Broker.js","../../events/Events":"src/events/Events.js"}],"src/ui/gui.js":[function(require,module,exports) {
+},{"./map-fly-to.svg":"src/ui/map-fly-to/map-fly-to.svg","../../events/Broker":"src/events/Broker.js","../../events/Events":"src/events/Events.js"}],"src/ui/area-tool/area-tool.svg":[function(require,module,exports) {
+module.exports = '<svg viewBox="-5 -5 60 60"><path d="M19.125 0a3.489 3.489 0 0 0-3.375 2.594L4.469 10a3.59 3.59 0 0 0-.969-.156 3.5 3.5 0 0 0-3.5 3.5c0 .949.387 1.808 1 2.437v28.282c-.613.628-1 1.488-1 2.437A3.5 3.5 0 0 0 3.5 50c.95 0 1.809-.387 2.438-1h25.156a3.47 3.47 0 0 0 2.437 1 3.5 3.5 0 0 0 3.5-3.5c0-.254-.011-.512-.062-.75l9.968-13.563A3.496 3.496 0 0 0 50 28.72a3.464 3.464 0 0 0-2.344-3.282L40.47 10.376A3.494 3.494 0 0 0 41 8.531a3.5 3.5 0 0 0-3.5-3.5c-.813 0-1.563.285-2.156.75L22.062 1.625A3.468 3.468 0 0 0 19.125 0zm2.688 5.719l12.375 3.906a3.47 3.47 0 0 0 2.624 2.344l6.938 14.625c-.46.593-.75 1.312-.75 2.125 0 .547.148 1.07.375 1.531l-9.406 12.781A3.975 3.975 0 0 0 33.53 43a3.476 3.476 0 0 0-3.156 2H6.656A3.446 3.446 0 0 0 5 43.344V16.5a3.476 3.476 0 0 0 2-3.156c0-.078-.027-.145-.031-.219l10.218-6.688A3.52 3.52 0 0 0 19.125 7a3.474 3.474 0 0 0 2.688-1.281z"/></svg>'
+},{}],"src/ui/area-tool/AreaTool.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = AreaTool;
+
+var _areaTool = _interopRequireDefault(require("./area-tool.svg"));
+
+var _Broker = _interopRequireDefault(require("../../events/Broker"));
+
+var _Events = _interopRequireDefault(require("../../events/Events"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function AreaTool() {
+  return {
+    image: _areaTool.default,
+    action: function action() {
+      _Broker.default.fire(_Events.default.DRAW_MODE, 'Polygon');
+    }
+  };
+}
+},{"./area-tool.svg":"src/ui/area-tool/area-tool.svg","../../events/Broker":"src/events/Broker.js","../../events/Events":"src/events/Events.js"}],"src/ui/ruler-tool/ruler-tool.svg":[function(require,module,exports) {
+module.exports = '<svg viewBox="-5 -5 60 60"><path d="M35.063 1.5a1.005 1.005 0 0 0-.594.313L1.875 34.406a.997.997 0 0 0 0 1.407L14.094 48.03a.999.999 0 0 0 1.437 0l32.594-32.593a.997.997 0 0 0 0-1.407L35.906 1.812a.985.985 0 0 0-.156-.156.992.992 0 0 0-.594-.156h-.093zm.124 2.438L46 14.75 14.812 45.906 4 35.125l2.844-2.844L9.28 34.72l1.438-1.438-2.438-2.437 2.563-2.563 5.437 5.438 1.438-1.438-5.438-5.437 2.563-2.563 2.437 2.438 1.438-1.438-2.438-2.437 2.563-2.563 5.437 5.438 1.438-1.438-5.438-5.437 2.563-2.563 2.437 2.438 1.438-1.438-2.438-2.437 2.563-2.563 5.437 5.438 1.438-1.438-5.438-5.437 2.563-2.563 2.437 2.438L34.72 9.28 32.28 6.844z"/></svg>'
+},{}],"src/ui/ruler-tool/RulerTool.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = RulerTool;
+
+var _rulerTool = _interopRequireDefault(require("./ruler-tool.svg"));
+
+var _Broker = _interopRequireDefault(require("../../events/Broker"));
+
+var _Events = _interopRequireDefault(require("../../events/Events"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function RulerTool() {
+  return {
+    image: _rulerTool.default,
+    action: function action() {
+      _Broker.default.fire(_Events.default.DRAW_MODE, 'LineString');
+    }
+  };
+}
+},{"./ruler-tool.svg":"src/ui/ruler-tool/ruler-tool.svg","../../events/Broker":"src/events/Broker.js","../../events/Events":"src/events/Events.js"}],"src/ui/gui.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2018,17 +2070,21 @@ var _LayerPickerConfig = _interopRequireDefault(require("./layer-picker/LayerPic
 
 var _MapFlyTo = _interopRequireDefault(require("./map-fly-to/MapFlyTo"));
 
+var _AreaTool = _interopRequireDefault(require("./area-tool/AreaTool"));
+
+var _RulerTool = _interopRequireDefault(require("./ruler-tool/RulerTool"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _default(targetDivId) {
   var gui = (0, _d3Selection.select)('#' + targetDivId).append('div').classed('gui-layer', true);
-  gui.append('div').classed('buttons', true).selectAll('div.gui-button').data([(0, _MapFlyTo.default)(), (0, _MakeScreenshot.default)(), (0, _LayerPicker.default)((0, _LayerPickerConfig.default)(gui))]).enter().append('div').classed('gui-button', true).each(function (d) {
+  gui.append('div').classed('buttons', true).selectAll('div.gui-button').data([(0, _AreaTool.default)(), (0, _RulerTool.default)(), (0, _MapFlyTo.default)(), (0, _MakeScreenshot.default)(), (0, _LayerPicker.default)((0, _LayerPickerConfig.default)(gui))]).enter().append('div').classed('gui-button', true).each(function (d) {
     (0, _d3Selection.select)(this).html(d.image).on('click', d.action).selectAll('path').attr('fill', '#ffffff');
   });
 }
 
 ;
-},{"./gui.css":"src/ui/gui.css","d3-selection":"node_modules/d3-selection/src/index.js","./make-screenshot/MakeScreenshot":"src/ui/make-screenshot/MakeScreenshot.js","./layer-picker/LayerPicker":"src/ui/layer-picker/LayerPicker.js","./layer-picker/LayerPickerConfig":"src/ui/layer-picker/LayerPickerConfig.js","./map-fly-to/MapFlyTo":"src/ui/map-fly-to/MapFlyTo.js"}],"node_modules/ol/ol.css":[function(require,module,exports) {
+},{"./gui.css":"src/ui/gui.css","d3-selection":"node_modules/d3-selection/src/index.js","./make-screenshot/MakeScreenshot":"src/ui/make-screenshot/MakeScreenshot.js","./layer-picker/LayerPicker":"src/ui/layer-picker/LayerPicker.js","./layer-picker/LayerPickerConfig":"src/ui/layer-picker/LayerPickerConfig.js","./map-fly-to/MapFlyTo":"src/ui/map-fly-to/MapFlyTo.js","./area-tool/AreaTool":"src/ui/area-tool/AreaTool.js","./ruler-tool/RulerTool":"src/ui/ruler-tool/RulerTool.js"}],"node_modules/ol/ol.css":[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
@@ -66701,7 +66757,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = ScreenShotSupport;
 
-var _fileSaver = require("file-saver");
+var _fileSaver = _interopRequireDefault(require("file-saver"));
 
 var _Broker = _interopRequireDefault(require("../events/Broker"));
 
@@ -66719,7 +66775,7 @@ function ScreenShotSupport(map) {
       }
 
       canvas.toBlob(function (blob) {
-        (0, _fileSaver.saveAs)(blob, fileName);
+        (0, _fileSaver.default)(blob, fileName);
       });
     });
     map.renderSync();
@@ -66965,7 +67021,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54650" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56707" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
